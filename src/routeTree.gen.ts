@@ -25,8 +25,13 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminCountriesRouteImport } from './routes/admin.countries'
 import { Route as AdminNumbersRouteImport } from './routes/admin.numbers'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
+import { Route as AdminPaymentsRouteImport } from './routes/admin.payments'
 import { Route as AdminPricingRouteImport } from './routes/admin.pricing'
+import { Route as AdminProvidersRouteImport } from './routes/admin.providers'
+import { Route as AdminReportsRouteImport } from './routes/admin.reports'
 import { Route as AdminServicesRouteImport } from './routes/admin.services'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminSupportRouteImport } from './routes/admin.support'
 import { Route as AdminTransactionsRouteImport } from './routes/admin.transactions'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
@@ -120,14 +125,39 @@ const AdminOrdersRoute = AdminOrdersRouteImport.update({
   path: '/orders',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminPaymentsRoute = AdminPaymentsRouteImport.update({
+  id: '/payments',
+  path: '/payments',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminPricingRoute = AdminPricingRouteImport.update({
   id: '/pricing',
   path: '/pricing',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminProvidersRoute = AdminProvidersRouteImport.update({
+  id: '/providers',
+  path: '/providers',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminReportsRoute = AdminReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminServicesRoute = AdminServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSupportRoute = AdminSupportRouteImport.update({
+  id: '/support',
+  path: '/support',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminTransactionsRoute = AdminTransactionsRouteImport.update({
@@ -207,8 +237,13 @@ export interface FileRoutesByFullPath {
   '/admin/countries': typeof AdminCountriesRoute
   '/admin/numbers': typeof AdminNumbersRoute
   '/admin/orders': typeof AdminOrdersRoute
+  '/admin/payments': typeof AdminPaymentsRoute
   '/admin/pricing': typeof AdminPricingRoute
+  '/admin/providers': typeof AdminProvidersRoute
+  '/admin/reports': typeof AdminReportsRoute
   '/admin/services': typeof AdminServicesRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/support': typeof AdminSupportRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/users': typeof AdminUsersRoute
   '/dashboard/api': typeof DashboardApiRoute
@@ -237,8 +272,13 @@ export interface FileRoutesByTo {
   '/admin/countries': typeof AdminCountriesRoute
   '/admin/numbers': typeof AdminNumbersRoute
   '/admin/orders': typeof AdminOrdersRoute
+  '/admin/payments': typeof AdminPaymentsRoute
   '/admin/pricing': typeof AdminPricingRoute
+  '/admin/providers': typeof AdminProvidersRoute
+  '/admin/reports': typeof AdminReportsRoute
   '/admin/services': typeof AdminServicesRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/support': typeof AdminSupportRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/users': typeof AdminUsersRoute
   '/dashboard/api': typeof DashboardApiRoute
@@ -270,8 +310,13 @@ export interface FileRoutesById {
   '/admin/countries': typeof AdminCountriesRoute
   '/admin/numbers': typeof AdminNumbersRoute
   '/admin/orders': typeof AdminOrdersRoute
+  '/admin/payments': typeof AdminPaymentsRoute
   '/admin/pricing': typeof AdminPricingRoute
+  '/admin/providers': typeof AdminProvidersRoute
+  '/admin/reports': typeof AdminReportsRoute
   '/admin/services': typeof AdminServicesRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/support': typeof AdminSupportRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/users': typeof AdminUsersRoute
   '/dashboard/api': typeof DashboardApiRoute
@@ -304,8 +349,13 @@ export interface FileRouteTypes {
     | '/admin/countries'
     | '/admin/numbers'
     | '/admin/orders'
+    | '/admin/payments'
     | '/admin/pricing'
+    | '/admin/providers'
+    | '/admin/reports'
     | '/admin/services'
+    | '/admin/settings'
+    | '/admin/support'
     | '/admin/transactions'
     | '/admin/users'
     | '/dashboard/api'
@@ -334,8 +384,13 @@ export interface FileRouteTypes {
     | '/admin/countries'
     | '/admin/numbers'
     | '/admin/orders'
+    | '/admin/payments'
     | '/admin/pricing'
+    | '/admin/providers'
+    | '/admin/reports'
     | '/admin/services'
+    | '/admin/settings'
+    | '/admin/support'
     | '/admin/transactions'
     | '/admin/users'
     | '/dashboard/api'
@@ -366,8 +421,13 @@ export interface FileRouteTypes {
     | '/admin/countries'
     | '/admin/numbers'
     | '/admin/orders'
+    | '/admin/payments'
     | '/admin/pricing'
+    | '/admin/providers'
+    | '/admin/reports'
     | '/admin/services'
+    | '/admin/settings'
+    | '/admin/support'
     | '/admin/transactions'
     | '/admin/users'
     | '/dashboard/api'
@@ -512,6 +572,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminOrdersRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/payments': {
+      id: '/admin/payments'
+      path: '/payments'
+      fullPath: '/admin/payments'
+      preLoaderRoute: typeof AdminPaymentsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/pricing': {
       id: '/admin/pricing'
       path: '/pricing'
@@ -519,11 +586,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPricingRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/providers': {
+      id: '/admin/providers'
+      path: '/providers'
+      fullPath: '/admin/providers'
+      preLoaderRoute: typeof AdminProvidersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/reports': {
+      id: '/admin/reports'
+      path: '/reports'
+      fullPath: '/admin/reports'
+      preLoaderRoute: typeof AdminReportsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/services': {
       id: '/admin/services'
       path: '/services'
       fullPath: '/admin/services'
       preLoaderRoute: typeof AdminServicesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/support': {
+      id: '/admin/support'
+      path: '/support'
+      fullPath: '/admin/support'
+      preLoaderRoute: typeof AdminSupportRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/transactions': {
@@ -617,8 +712,13 @@ interface AdminRouteChildren {
   AdminCountriesRoute: typeof AdminCountriesRoute
   AdminNumbersRoute: typeof AdminNumbersRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
+  AdminPaymentsRoute: typeof AdminPaymentsRoute
   AdminPricingRoute: typeof AdminPricingRoute
+  AdminProvidersRoute: typeof AdminProvidersRoute
+  AdminReportsRoute: typeof AdminReportsRoute
   AdminServicesRoute: typeof AdminServicesRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminSupportRoute: typeof AdminSupportRoute
   AdminTransactionsRoute: typeof AdminTransactionsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -628,8 +728,13 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminCountriesRoute: AdminCountriesRoute,
   AdminNumbersRoute: AdminNumbersRoute,
   AdminOrdersRoute: AdminOrdersRoute,
+  AdminPaymentsRoute: AdminPaymentsRoute,
   AdminPricingRoute: AdminPricingRoute,
+  AdminProvidersRoute: AdminProvidersRoute,
+  AdminReportsRoute: AdminReportsRoute,
   AdminServicesRoute: AdminServicesRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
+  AdminSupportRoute: AdminSupportRoute,
   AdminTransactionsRoute: AdminTransactionsRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
