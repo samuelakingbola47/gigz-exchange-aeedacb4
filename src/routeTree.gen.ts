@@ -22,8 +22,12 @@ import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminCountriesRouteImport } from './routes/admin.countries'
 import { Route as AdminNumbersRouteImport } from './routes/admin.numbers'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
+import { Route as AdminPricingRouteImport } from './routes/admin.pricing'
+import { Route as AdminServicesRouteImport } from './routes/admin.services'
+import { Route as AdminTransactionsRouteImport } from './routes/admin.transactions'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
 import { Route as DashboardApiRouteImport } from './routes/dashboard.api'
@@ -101,6 +105,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminCountriesRoute = AdminCountriesRouteImport.update({
+  id: '/countries',
+  path: '/countries',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminNumbersRoute = AdminNumbersRouteImport.update({
   id: '/numbers',
   path: '/numbers',
@@ -109,6 +118,21 @@ const AdminNumbersRoute = AdminNumbersRouteImport.update({
 const AdminOrdersRoute = AdminOrdersRouteImport.update({
   id: '/orders',
   path: '/orders',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPricingRoute = AdminPricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminServicesRoute = AdminServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminTransactionsRoute = AdminTransactionsRouteImport.update({
+  id: '/transactions',
+  path: '/transactions',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminUsersRoute = AdminUsersRouteImport.update({
@@ -180,8 +204,12 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/register': typeof RegisterRoute
   '/services': typeof ServicesRoute
+  '/admin/countries': typeof AdminCountriesRoute
   '/admin/numbers': typeof AdminNumbersRoute
   '/admin/orders': typeof AdminOrdersRoute
+  '/admin/pricing': typeof AdminPricingRoute
+  '/admin/services': typeof AdminServicesRoute
+  '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/users': typeof AdminUsersRoute
   '/dashboard/api': typeof DashboardApiRoute
   '/dashboard/buy': typeof DashboardBuyRoute
@@ -206,8 +234,12 @@ export interface FileRoutesByTo {
   '/pricing': typeof PricingRoute
   '/register': typeof RegisterRoute
   '/services': typeof ServicesRoute
+  '/admin/countries': typeof AdminCountriesRoute
   '/admin/numbers': typeof AdminNumbersRoute
   '/admin/orders': typeof AdminOrdersRoute
+  '/admin/pricing': typeof AdminPricingRoute
+  '/admin/services': typeof AdminServicesRoute
+  '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/users': typeof AdminUsersRoute
   '/dashboard/api': typeof DashboardApiRoute
   '/dashboard/buy': typeof DashboardBuyRoute
@@ -235,8 +267,12 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/register': typeof RegisterRoute
   '/services': typeof ServicesRoute
+  '/admin/countries': typeof AdminCountriesRoute
   '/admin/numbers': typeof AdminNumbersRoute
   '/admin/orders': typeof AdminOrdersRoute
+  '/admin/pricing': typeof AdminPricingRoute
+  '/admin/services': typeof AdminServicesRoute
+  '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/users': typeof AdminUsersRoute
   '/dashboard/api': typeof DashboardApiRoute
   '/dashboard/buy': typeof DashboardBuyRoute
@@ -265,8 +301,12 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/register'
     | '/services'
+    | '/admin/countries'
     | '/admin/numbers'
     | '/admin/orders'
+    | '/admin/pricing'
+    | '/admin/services'
+    | '/admin/transactions'
     | '/admin/users'
     | '/dashboard/api'
     | '/dashboard/buy'
@@ -291,8 +331,12 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/register'
     | '/services'
+    | '/admin/countries'
     | '/admin/numbers'
     | '/admin/orders'
+    | '/admin/pricing'
+    | '/admin/services'
+    | '/admin/transactions'
     | '/admin/users'
     | '/dashboard/api'
     | '/dashboard/buy'
@@ -319,8 +363,12 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/register'
     | '/services'
+    | '/admin/countries'
     | '/admin/numbers'
     | '/admin/orders'
+    | '/admin/pricing'
+    | '/admin/services'
+    | '/admin/transactions'
     | '/admin/users'
     | '/dashboard/api'
     | '/dashboard/buy'
@@ -443,6 +491,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/countries': {
+      id: '/admin/countries'
+      path: '/countries'
+      fullPath: '/admin/countries'
+      preLoaderRoute: typeof AdminCountriesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/numbers': {
       id: '/admin/numbers'
       path: '/numbers'
@@ -455,6 +510,27 @@ declare module '@tanstack/react-router' {
       path: '/orders'
       fullPath: '/admin/orders'
       preLoaderRoute: typeof AdminOrdersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/pricing': {
+      id: '/admin/pricing'
+      path: '/pricing'
+      fullPath: '/admin/pricing'
+      preLoaderRoute: typeof AdminPricingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/services': {
+      id: '/admin/services'
+      path: '/services'
+      fullPath: '/admin/services'
+      preLoaderRoute: typeof AdminServicesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/transactions': {
+      id: '/admin/transactions'
+      path: '/transactions'
+      fullPath: '/admin/transactions'
+      preLoaderRoute: typeof AdminTransactionsRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/users': {
@@ -538,15 +614,23 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminCountriesRoute: typeof AdminCountriesRoute
   AdminNumbersRoute: typeof AdminNumbersRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
+  AdminPricingRoute: typeof AdminPricingRoute
+  AdminServicesRoute: typeof AdminServicesRoute
+  AdminTransactionsRoute: typeof AdminTransactionsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminCountriesRoute: AdminCountriesRoute,
   AdminNumbersRoute: AdminNumbersRoute,
   AdminOrdersRoute: AdminOrdersRoute,
+  AdminPricingRoute: AdminPricingRoute,
+  AdminServicesRoute: AdminServicesRoute,
+  AdminTransactionsRoute: AdminTransactionsRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
