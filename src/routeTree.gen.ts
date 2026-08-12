@@ -22,6 +22,9 @@ import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminNumbersRouteImport } from './routes/admin.numbers'
+import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
 import { Route as DashboardApiRouteImport } from './routes/dashboard.api'
 import { Route as DashboardBuyRouteImport } from './routes/dashboard.buy'
@@ -98,6 +101,21 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminNumbersRoute = AdminNumbersRouteImport.update({
+  id: '/numbers',
+  path: '/numbers',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminOrdersRoute = AdminOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -162,6 +180,9 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/register': typeof RegisterRoute
   '/services': typeof ServicesRoute
+  '/admin/numbers': typeof AdminNumbersRoute
+  '/admin/orders': typeof AdminOrdersRoute
+  '/admin/users': typeof AdminUsersRoute
   '/dashboard/api': typeof DashboardApiRoute
   '/dashboard/buy': typeof DashboardBuyRoute
   '/dashboard/history': typeof DashboardHistoryRoute
@@ -185,6 +206,9 @@ export interface FileRoutesByTo {
   '/pricing': typeof PricingRoute
   '/register': typeof RegisterRoute
   '/services': typeof ServicesRoute
+  '/admin/numbers': typeof AdminNumbersRoute
+  '/admin/orders': typeof AdminOrdersRoute
+  '/admin/users': typeof AdminUsersRoute
   '/dashboard/api': typeof DashboardApiRoute
   '/dashboard/buy': typeof DashboardBuyRoute
   '/dashboard/history': typeof DashboardHistoryRoute
@@ -211,6 +235,9 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/register': typeof RegisterRoute
   '/services': typeof ServicesRoute
+  '/admin/numbers': typeof AdminNumbersRoute
+  '/admin/orders': typeof AdminOrdersRoute
+  '/admin/users': typeof AdminUsersRoute
   '/dashboard/api': typeof DashboardApiRoute
   '/dashboard/buy': typeof DashboardBuyRoute
   '/dashboard/history': typeof DashboardHistoryRoute
@@ -238,6 +265,9 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/register'
     | '/services'
+    | '/admin/numbers'
+    | '/admin/orders'
+    | '/admin/users'
     | '/dashboard/api'
     | '/dashboard/buy'
     | '/dashboard/history'
@@ -261,6 +291,9 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/register'
     | '/services'
+    | '/admin/numbers'
+    | '/admin/orders'
+    | '/admin/users'
     | '/dashboard/api'
     | '/dashboard/buy'
     | '/dashboard/history'
@@ -286,6 +319,9 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/register'
     | '/services'
+    | '/admin/numbers'
+    | '/admin/orders'
+    | '/admin/users'
     | '/dashboard/api'
     | '/dashboard/buy'
     | '/dashboard/history'
@@ -407,6 +443,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/numbers': {
+      id: '/admin/numbers'
+      path: '/numbers'
+      fullPath: '/admin/numbers'
+      preLoaderRoute: typeof AdminNumbersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/orders': {
+      id: '/admin/orders'
+      path: '/orders'
+      fullPath: '/admin/orders'
+      preLoaderRoute: typeof AdminOrdersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/dashboard/': {
       id: '/dashboard/'
       path: '/'
@@ -481,10 +538,16 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminNumbersRoute: typeof AdminNumbersRoute
+  AdminOrdersRoute: typeof AdminOrdersRoute
+  AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminNumbersRoute: AdminNumbersRoute,
+  AdminOrdersRoute: AdminOrdersRoute,
+  AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
