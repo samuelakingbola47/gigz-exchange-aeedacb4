@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Search, Users } from "lucide-react";
+import { Search, SearchX, Users } from "lucide-react";
 import { toast } from "sonner";
 import { AdminShell } from "@/components/app/CustomerShell";
 import { StatCard } from "@/components/app/StatCard";
@@ -54,7 +54,7 @@ function AdminUsers() {
           <p className="text-xs text-muted-foreground">{rows.length} shown</p>
         </div>
         {rows.length === 0 ? (
-          <EmptyState title="No users found" description="Try a different search term." />
+          <EmptyState icon={SearchX} title="No users found" description="Try a different search term." />
         ) : (
           <div className="overflow-x-auto">
             <Table>

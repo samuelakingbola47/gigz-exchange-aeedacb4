@@ -31,7 +31,7 @@ export const Route = createFileRoute("/dashboard/support")({
 });
 
 function SupportPage() {
-  const [selected, setSelected] = useState(tickets[0].id);
+  const [selected, setSelected] = useState(tickets[0]!.id);
   const [open, setOpen] = useState(false);
   const ticket = tickets.find((t) => t.id === selected)!;
 

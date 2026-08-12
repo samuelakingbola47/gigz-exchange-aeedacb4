@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Search } from "lucide-react";
+import { Search, SearchX } from "lucide-react";
 import { toast } from "sonner";
 import { AdminShell } from "@/components/app/CustomerShell";
 import { StatCard } from "@/components/app/StatCard";
@@ -59,7 +59,7 @@ function AdminOrders() {
           </Select>
         </div>
         {rows.length === 0 ? (
-          <EmptyState title="No orders match" description="Adjust your filters to see more results." />
+          <EmptyState icon={SearchX} title="No orders match" description="Adjust your filters to see more results." />
         ) : (
           <div className="overflow-x-auto">
             <Table>

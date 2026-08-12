@@ -21,7 +21,7 @@ export const Route = createFileRoute("/admin/settings")({
 });
 
 const toggles = [
-  { t: "Maintenance mode", d: "Show a maintenance page to all customers." },
+  { t: "Maintenance mode", d: "Show a maintenance page to all customers.", on: false },
   { t: "New registrations", d: "Allow new accounts to sign up.", on: true },
   { t: "API access", d: "Enable programmatic ordering for API keys.", on: true },
   { t: "Auto-refunds", d: "Refund expired orders automatically.", on: true },
