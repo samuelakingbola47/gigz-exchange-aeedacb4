@@ -21,7 +21,7 @@ export const Route = createFileRoute("/admin/payments")({
 const gateways = [
   { name: "Card payments", desc: "Visa, Mastercard and Amex deposits.", fee: "2.9% + ₦100", on: true },
   { name: "Bank transfer", desc: "Local transfers with manual confirmation.", fee: "Flat ₦150", on: true },
-  { name: "Crypto (USDT)", desc: "TRC-20 and ERC-20 deposits.", fee: "1.0%", on: true },
+  { name: "Crypto stablecoin", desc: "USDT TRC-20 and ERC-20 demo placeholder.", fee: "1.0%", on: true },
   { name: "Mobile money", desc: "Regional wallets in Africa and Asia.", fee: "1.8%", on: false },
 ];
 

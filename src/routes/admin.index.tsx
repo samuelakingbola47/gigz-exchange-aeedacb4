@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import {
   Area, AreaChart, Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
-import { Activity, DollarSign, Package, ShoppingCart, Users } from "lucide-react";
+import { Activity, Banknote, Package, ShoppingCart, Users } from "lucide-react";
 import { AdminShell } from "@/components/app/CustomerShell";
 import { StatCard } from "@/components/app/StatCard";
 import { StatusBadge } from "@/components/app/StatusBadge";
@@ -29,7 +29,7 @@ function AdminOverview() {
         <StatCard label="Total users" value="10,820" icon={Users} trend="+8.4%" hint="vs last month" />
         <StatCard label="Active users (30d)" value="6,412" icon={Activity} trend="+5.1%" hint="logged in" />
         <StatCard label="Total orders" value="213,904" icon={ShoppingCart} trend="+11%" hint="lifetime" />
-        <StatCard label="Revenue (Aug)" value="₦59.9M" icon={DollarSign} trend="+14.8%" hint="month to date" />
+        <StatCard label="Revenue (Aug)" value="₦59.9M" icon={Banknote} trend="+14.8%" hint="month to date" />
       </div>
       <div className="mt-4 grid gap-4 sm:grid-cols-3">
         <StatCard label="Pending orders" value="48" hint="Awaiting SMS" />
