@@ -34,7 +34,7 @@ const methods = [
 ];
 
 function WalletPage() {
-  const [amount, setAmount] = useState("50");
+  const [amount, setAmount] = useState("15000");
   const [method, setMethod] = useState("card");
   const [open, setOpen] = useState(false);
 
@@ -57,7 +57,7 @@ function WalletPage() {
                 <Label htmlFor="amt">Amount (₦)</Label>
                 <Input id="amt" value={amount} onChange={(e) => setAmount(e.target.value)} inputMode="decimal" />
                 <div className="flex gap-2 pt-1">
-                  {["10", "25", "50", "100"].map((a) => (
+                  {["5000", "10000", "25000", "50000"].map((a) => (
                     <button
                       key={a}
                       onClick={() => setAmount(a)}
@@ -66,7 +66,7 @@ function WalletPage() {
                         amount === a ? "border-accent bg-accent/10" : "border-border hover:bg-secondary",
                       )}
                     >
-                      ${a}
+                      {ngn(Number(a))}
                     </button>
                   ))}
                 </div>
@@ -98,7 +98,7 @@ function WalletPage() {
               <Button
                 onClick={() => {
                   setOpen(false);
-                  toast.success(`Deposit of $${amount} simulated`, { description: "No real payment was processed." });
+                  toast.success(`Deposit of ${ngn(Number(amount) || 0)} simulated`, { description: "No real payment was processed." });
                 }}
               >
                 Confirm deposit
