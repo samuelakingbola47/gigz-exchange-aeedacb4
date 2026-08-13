@@ -19,8 +19,8 @@ export const Route = createFileRoute("/admin/payments")({
 });
 
 const gateways = [
-  { name: "Card payments", desc: "Visa, Mastercard and Amex deposits.", fee: "2.9% + $0.30", on: true },
-  { name: "Bank transfer", desc: "Local transfers with manual confirmation.", fee: "Flat $0.50", on: true },
+  { name: "Card payments", desc: "Visa, Mastercard and Amex deposits.", fee: "2.9% + ₦100", on: true },
+  { name: "Bank transfer", desc: "Local transfers with manual confirmation.", fee: "Flat ₦150", on: true },
   { name: "Crypto (USDT)", desc: "TRC-20 and ERC-20 deposits.", fee: "1.0%", on: true },
   { name: "Mobile money", desc: "Regional wallets in Africa and Asia.", fee: "1.8%", on: false },
 ];
@@ -29,8 +29,8 @@ function AdminPayments() {
   return (
     <AdminShell title="Payments" subtitle="Deposit methods available to customers. Not connected in Phase 1.">
       <div className="grid gap-4 sm:grid-cols-3">
-        <StatCard label="Deposits (30d)" value="$62,410" trend="+9.1%" />
-        <StatCard label="Average deposit" value="$48.20" hint="Per transaction" />
+        <StatCard label="Deposits (30d)" value="₦93.6M" trend="+9.1%" />
+        <StatCard label="Average deposit" value="₦72,300" hint="Per transaction" />
         <StatCard label="Failed payments" value="1.2%" hint="Last 30 days" />
       </div>
 

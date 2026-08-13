@@ -29,17 +29,17 @@ export const Route = createFileRoute("/pricing")({
 const plans = [
   {
     name: "Pay as you go",
-    price: "$0.18",
+    price: "₦270",
     unit: "per verification, from",
     body: "Best for individuals and occasional verification needs.",
     cta: "Create account",
     to: "/register",
-    features: ["No monthly fee", "All 50+ countries", "Automatic refunds on expiry", "Wallet top-ups from $5", "Email support"],
+    features: ["No monthly fee", "All 50+ countries", "Automatic refunds on expiry", "Wallet top-ups from ₦7,500", "Email support"],
   },
   {
     name: "Volume",
     price: "Up to 25% off",
-    unit: "on $250+ monthly spend",
+    unit: "on ₦375,000+ monthly spend",
     body: "For teams running verification at consistent scale.",
     cta: "Start scaling",
     to: "/register",
@@ -58,10 +58,10 @@ const plans = [
 ];
 
 const tiers = [
-  { spend: "$0 – $249", discount: "—", support: "Email" },
-  { spend: "$250 – $999", discount: "10%", support: "Priority email" },
-  { spend: "$1,000 – $4,999", discount: "18%", support: "Priority + chat" },
-  { spend: "$5,000+", discount: "25%", support: "Dedicated manager" },
+  { spend: "₦0 – ₦374K", discount: "—", support: "Email" },
+  { spend: "₦375K – ₦1.5M", discount: "10%", support: "Priority email" },
+  { spend: "₦1.5M – ₦7.4M", discount: "18%", support: "Priority + chat" },
+  { spend: "₦7.5M+", discount: "25%", support: "Dedicated manager" },
 ];
 
 function PricingPage() {

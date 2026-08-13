@@ -27,7 +27,7 @@ const groups = [
     items: [
       { q: "What is Gigz Exchange?", a: "Gigz Exchange is a platform that gives customers access to SMS verification numbers across 50+ countries through a single dashboard and API." },
       { q: "Do I need to sign a contract?", a: "No. Pay-as-you-go accounts have no minimum spend or contract. Enterprise agreements are available if you need invoicing or an SLA." },
-      { q: "How much does a verification cost?", a: "Prices start from $0.18 per verification depending on country and service. All prices in this prototype are demo data." },
+      { q: "How much does a verification cost?", a: "Prices start from ₦270 per verification depending on country and service. All prices in this prototype are demo data." },
     ],
   },
   {

@@ -32,7 +32,7 @@ function AdminReports() {
       actions={<Button variant="outline" onClick={() => toast("Report export queued (demo)")}>Export report</Button>}
     >
       <div className="grid gap-4 sm:grid-cols-4">
-        <StatCard label="Revenue (Aug)" value="$39,900" trend="+14.8%" />
+        <StatCard label="Revenue (Aug)" value="₦59.9M" trend="+14.8%" />
         <StatCard label="Orders (Aug)" value="42,600" trend="+11.5%" />
         <StatCard label="New users (Aug)" value="1,420" trend="+15.1%" />
         <StatCard label="Success rate" value="98.6%" hint="Delivered codes" />

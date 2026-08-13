@@ -217,8 +217,8 @@ function Home() {
       <Section eyebrow="Simple pricing" title="Pay as you go, or scale with volume" description="Mock pricing for the prototype.">
         <div className="grid gap-4 md:grid-cols-3">
           {[
-            { name: "Pay as you go", price: "$0.18", note: "per verification, from", features: ["No monthly fee", "Automatic refunds", "All countries"] },
-            { name: "Volume", price: "-25%", note: "on $250+ monthly spend", features: ["Bulk discounts", "Priority routes", "API access"], featured: true },
+            { name: "Pay as you go", price: "₦270", note: "per verification, from", features: ["No monthly fee", "Automatic refunds", "All countries"] },
+            { name: "Volume", price: "-25%", note: "on ₦375,000+ monthly spend", features: ["Bulk discounts", "Priority routes", "API access"], featured: true },
             { name: "Enterprise", price: "Custom", note: "contact sales", features: ["Dedicated pools", "SLA & invoicing", "Account manager"] },
           ].map((p) => (
             <div

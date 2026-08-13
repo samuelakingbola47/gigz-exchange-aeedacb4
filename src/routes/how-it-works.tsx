@@ -18,7 +18,7 @@ export const Route = createFileRoute("/how-it-works")({
 
 const steps = [
   { icon: UserPlus, n: "01", title: "Create an account", body: "Register with your email in under a minute. No documents, no waiting list.", detail: "You'll land straight in the dashboard with your account ID and wallet ready." },
-  { icon: CreditCard, n: "02", title: "Add funds", body: "Top up your wallet from $5. Your balance is visible on every screen.", detail: "Payment methods shown in this prototype are demo placeholders." },
+  { icon: CreditCard, n: "02", title: "Add funds", body: "Top up your wallet from ₦7,500. Your balance is visible on every screen.", detail: "Payment methods shown in this prototype are demo placeholders." },
   { icon: MousePointerClick, n: "03", title: "Select service & country", body: "Filter live inventory by country and service, then request your number.", detail: "Pricing and availability update as you choose." },
   { icon: MessageSquareText, n: "04", title: "Receive your SMS", body: "Your verification code appears in the dashboard the moment it arrives.", detail: "If nothing arrives before the timer runs out, you're refunded automatically." },
 ];

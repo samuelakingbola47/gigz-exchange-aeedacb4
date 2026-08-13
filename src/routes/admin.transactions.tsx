@@ -29,10 +29,10 @@ function AdminTransactions() {
       actions={<Button variant="outline" onClick={() => toast("Export queued (demo)")}>Export ledger</Button>}
     >
       <div className="grid gap-4 sm:grid-cols-4">
-        <StatCard label="Deposits (30d)" value="$62,410" trend="+9.1%" />
-        <StatCard label="Spend (30d)" value="$39,900" trend="+14.8%" />
-        <StatCard label="Refunds (30d)" value="$1,284" hint="Auto + manual" />
-        <StatCard label="Held balance" value="$184,220" hint="Customer wallets" />
+        <StatCard label="Deposits (30d)" value="₦93.6M" trend="+9.1%" />
+        <StatCard label="Spend (30d)" value="₦59.9M" trend="+14.8%" />
+        <StatCard label="Refunds (30d)" value="₦1.9M" hint="Auto + manual" />
+        <StatCard label="Held balance" value="₦276.3M" hint="Customer wallets" />
       </div>
 
       <div className="surface-card mt-6 overflow-x-auto">

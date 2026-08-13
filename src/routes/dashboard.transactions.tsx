@@ -37,9 +37,9 @@ function TransactionsPage() {
       actions={<Button variant="outline"><Download className="mr-1.5 h-4 w-4" />Export</Button>}
     >
       <div className="grid gap-4 sm:grid-cols-3">
-        <StatCard label="Total deposited" value="$870.53" hint="Lifetime (demo)" />
-        <StatCard label="Total spent" value="$742.19" hint="Across 1,284 orders" />
-        <StatCard label="Refunded" value="$18.42" hint="Expired & cancelled orders" />
+        <StatCard label="Total deposited" value="₦1,305,800" hint="Lifetime (demo)" />
+        <StatCard label="Total spent" value="₦1,113,290" hint="Across 1,284 orders" />
+        <StatCard label="Refunded" value="₦27,630" hint="Expired & cancelled orders" />
       </div>
 
       <div className="surface-card mt-6 flex items-center justify-between p-4">

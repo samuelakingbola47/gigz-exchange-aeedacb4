@@ -30,7 +30,7 @@ export const Route = createFileRoute("/dashboard/")({
 const activity = [
   { at: "14:02", text: "Purchased WhatsApp number · United States" },
   { at: "13:41", text: "SMS received for order GX-90408" },
-  { at: "09:15", text: "Wallet topped up with $50.00 (demo)" },
+  { at: "09:15", text: "Wallet topped up with ₦75,000 (demo)" },
   { at: "Yesterday", text: "API key gx_live_••••7f21 generated" },
   { at: "Yesterday", text: "Signed in from Chrome · macOS" },
 ];
@@ -48,10 +48,10 @@ function DashboardHome() {
       }
     >
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard label="Wallet balance" value="$128.34" icon={Wallet} hint="Available to spend" />
+        <StatCard label="Wallet balance" value="₦192,510" icon={Wallet} hint="Available to spend" />
         <StatCard label="Active orders" value="2" icon={ListChecks} hint="1 waiting for SMS" />
         <StatCard label="Completed orders" value="1,284" icon={CheckCircle2} trend="+12%" hint="vs last month" />
-        <StatCard label="Total spent" value="$742.19" icon={CreditCard} hint="Lifetime" />
+        <StatCard label="Total spent" value="₦1,113,290" icon={CreditCard} hint="Lifetime" />
       </div>
 
       <div className="mt-6 grid gap-5 xl:grid-cols-3">

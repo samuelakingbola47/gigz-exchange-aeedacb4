@@ -29,7 +29,7 @@ function AdminOverview() {
         <StatCard label="Total users" value="10,820" icon={Users} trend="+8.4%" hint="vs last month" />
         <StatCard label="Active users (30d)" value="6,412" icon={Activity} trend="+5.1%" hint="logged in" />
         <StatCard label="Total orders" value="213,904" icon={ShoppingCart} trend="+11%" hint="lifetime" />
-        <StatCard label="Revenue (Aug)" value="$39,900" icon={DollarSign} trend="+14.8%" hint="month to date" />
+        <StatCard label="Revenue (Aug)" value="₦59.9M" icon={DollarSign} trend="+14.8%" hint="month to date" />
       </div>
       <div className="mt-4 grid gap-4 sm:grid-cols-3">
         <StatCard label="Pending orders" value="48" hint="Awaiting SMS" />
@@ -40,7 +40,7 @@ function AdminOverview() {
       <div className="mt-6 grid gap-5 xl:grid-cols-3">
         <div className="surface-card p-5 xl:col-span-2">
           <h2 className="text-sm font-semibold">Revenue</h2>
-          <p className="text-xs text-muted-foreground">Monthly gross revenue (USD)</p>
+          <p className="text-xs text-muted-foreground">Monthly gross revenue (₦)</p>
           <div className="mt-5 h-64">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={revenueSeries}>

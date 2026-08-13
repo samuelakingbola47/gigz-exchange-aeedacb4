@@ -20,10 +20,10 @@ export const Route = createFileRoute("/admin/pricing")({
 });
 
 const tiers = [
-  { tier: "Starter", min: 0, discount: "0%", effective: "$0.45" },
-  { tier: "Growth", min: 500, discount: "8%", effective: "$0.41" },
-  { tier: "Volume", min: 2500, discount: "15%", effective: "$0.38" },
-  { tier: "Enterprise", min: 10000, discount: "24%", effective: "$0.34" },
+  { tier: "Starter", min: 0, discount: "0%", effective: "₦675" },
+  { tier: "Growth", min: 500, discount: "8%", effective: "₦615" },
+  { tier: "Volume", min: 2500, discount: "15%", effective: "₦570" },
+  { tier: "Enterprise", min: 10000, discount: "24%", effective: "₦510" },
 ];
 
 function AdminPricing() {
@@ -31,7 +31,7 @@ function AdminPricing() {
     <AdminShell title="Pricing" subtitle="Margins and volume discounts applied at checkout.">
       <div className="grid gap-4 sm:grid-cols-3">
         <StatCard label="Average margin" value="32%" hint="Across all routes" />
-        <StatCard label="Avg. sale price" value="$0.41" hint="Last 30 days" />
+        <StatCard label="Avg. sale price" value="₦615" hint="Last 30 days" />
         <StatCard label="Discounted orders" value="41%" hint="Volume tiers" />
       </div>
 
@@ -40,8 +40,8 @@ function AdminPricing() {
           <h2 className="text-sm font-semibold">Global rules</h2>
           <div className="mt-5 space-y-4">
             <div className="space-y-2"><Label htmlFor="margin">Default margin (%)</Label><Input id="margin" defaultValue="32" /></div>
-            <div className="space-y-2"><Label htmlFor="min">Minimum price ($)</Label><Input id="min" defaultValue="0.15" /></div>
-            <div className="space-y-2"><Label htmlFor="round">Rounding increment ($)</Label><Input id="round" defaultValue="0.01" /></div>
+            <div className="space-y-2"><Label htmlFor="min">Minimum price (₦)</Label><Input id="min" defaultValue="225" /></div>
+            <div className="space-y-2"><Label htmlFor="round">Rounding increment (₦)</Label><Input id="round" defaultValue="5" /></div>
           </div>
           <Button type="submit" className="mt-6">Save rules</Button>
         </form>

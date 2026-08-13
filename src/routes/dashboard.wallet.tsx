@@ -54,7 +54,7 @@ function WalletPage() {
             </DialogHeader>
             <div className="space-y-5">
               <div className="space-y-2">
-                <Label htmlFor="amt">Amount (USD)</Label>
+                <Label htmlFor="amt">Amount (₦)</Label>
                 <Input id="amt" value={amount} onChange={(e) => setAmount(e.target.value)} inputMode="decimal" />
                 <div className="flex gap-2 pt-1">
                   {["10", "25", "50", "100"].map((a) => (
@@ -115,7 +115,7 @@ function WalletPage() {
             <p className="flex items-center gap-2 text-xs uppercase tracking-[0.16em] text-ink-foreground/60">
               <Wallet className="h-4 w-4 text-accent" /> Current balance
             </p>
-            <p className="mt-3 font-display text-5xl font-bold">$128.34</p>
+            <p className="mt-3 font-display text-5xl font-bold">₦192,510</p>
             <p className="mt-2 text-sm text-ink-foreground/60">Account ID · GX-USR-10241</p>
             <div className="mt-8 flex flex-wrap gap-2">
               <Button onClick={() => setOpen(true)}>Add funds</Button>
@@ -126,8 +126,8 @@ function WalletPage() {
           </div>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
-          <StatCard label="Total deposited" value="$870.53" hint="Lifetime deposits" />
-          <StatCard label="Total spent" value="$742.19" hint="Across 1,284 orders" />
+          <StatCard label="Total deposited" value="₦1,305,800" hint="Lifetime deposits" />
+          <StatCard label="Total spent" value="₦1,113,290" hint="Across 1,284 orders" />
         </div>
       </div>
 
