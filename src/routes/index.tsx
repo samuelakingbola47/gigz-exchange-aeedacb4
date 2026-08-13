@@ -21,6 +21,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { services, countries } from "@/lib/mock-data";
+import { ngn } from "@/lib/currency";
+import { ServiceIcon } from "@/components/brand/ServiceIcon";
+import { CountryFlag } from "@/components/brand/CountryFlag";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -161,13 +164,13 @@ function Home() {
           {services.slice(0, 9).map((s) => (
             <div key={s.id} className="flex items-center justify-between rounded-2xl border border-border bg-card px-4 py-3.5 transition-colors hover:border-accent/50">
               <div className="flex items-center gap-3">
-                <span className="grid h-9 w-9 place-items-center rounded-xl bg-secondary text-base">{s.emoji}</span>
+                <ServiceIcon service={s.id} size="sm" />
                 <div>
                   <p className="text-sm font-semibold">{s.name}</p>
                   <p className="text-xs text-muted-foreground">{s.category}</p>
                 </div>
               </div>
-              <p className="text-sm font-semibold">${s.price.toFixed(2)}</p>
+              <p className="text-sm font-semibold">{ngn(s.price)}</p>
             </div>
           ))}
         </div>
@@ -184,14 +187,14 @@ function Home() {
           {countries.slice(0, 8).map((c) => (
             <div key={c.id} className="surface-card px-4 py-4 transition-shadow hover:shadow-[var(--shadow-lift)]">
               <div className="flex items-center gap-3">
-                <span className="text-2xl">{c.flag}</span>
+                <CountryFlag country={c.id} name={c.name} size="lg" />
                 <div>
                   <p className="text-sm font-semibold">{c.name}</p>
                   <p className="text-xs text-muted-foreground">{c.numbers.toLocaleString()} numbers</p>
                 </div>
               </div>
               <p className="mt-3 text-xs text-muted-foreground">
-                from <span className="font-semibold text-foreground">${c.price.toFixed(2)}</span>
+                from <span className="font-semibold text-foreground">{ngn(c.price)}</span>
               </p>
             </div>
           ))}
@@ -216,8 +219,8 @@ function Home() {
       <Section eyebrow="Simple pricing" title="Pay as you go, or scale with volume" description="Mock pricing for the prototype.">
         <div className="grid gap-4 md:grid-cols-3">
           {[
-            { name: "Pay as you go", price: "$0.18", note: "per verification, from", features: ["No monthly fee", "Automatic refunds", "All countries"] },
-            { name: "Volume", price: "-25%", note: "on $250+ monthly spend", features: ["Bulk discounts", "Priority routes", "API access"], featured: true },
+            { name: "Pay as you go", price: "₦270", note: "per verification, from", features: ["No monthly fee", "Automatic refunds", "All countries"] },
+            { name: "Volume", price: "-25%", note: "on ₦375,000+ monthly spend", features: ["Bulk discounts", "Priority routes", "API access"], featured: true },
             { name: "Enterprise", price: "Custom", note: "contact sales", features: ["Dedicated pools", "SLA & invoicing", "Account manager"] },
           ].map((p) => (
             <div

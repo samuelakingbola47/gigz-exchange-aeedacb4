@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { EmptyState } from "@/components/app/EmptyState";
 import { countries } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
+import { ngn } from "@/lib/currency";
+import { CountryFlag } from "@/components/brand/CountryFlag";
 
 export const Route = createFileRoute("/countries")({
   head: () => ({
@@ -82,7 +84,7 @@ function CountriesPage() {
               <div key={c.id} className="surface-card p-5 transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <span className="grid h-12 w-12 place-items-center rounded-2xl bg-secondary text-2xl">{c.flag}</span>
+                    <CountryFlag country={c.id} name={c.name} size="xl" className="rounded-lg" />
                     <div>
                       <h3 className="text-base font-semibold">{c.name}</h3>
                       <p className="text-xs text-muted-foreground">{c.dial} · {c.region}</p>
@@ -99,7 +101,7 @@ function CountriesPage() {
                   </div>
                   <div>
                     <dt className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground">From</dt>
-                    <dd className="mt-0.5 font-semibold">${c.price.toFixed(2)}</dd>
+                    <dd className="mt-0.5 font-semibold">{ngn(c.price)}</dd>
                   </div>
                 </dl>
                 <Button asChild size="sm" variant="outline" className="mt-4 w-full">

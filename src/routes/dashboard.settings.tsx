@@ -28,7 +28,7 @@ export const Route = createFileRoute("/dashboard/settings")({
 const notifications = [
   { t: "SMS received", d: "Email me the moment a verification code arrives.", on: true },
   { t: "Order expired", d: "Notify me when an order expires and is refunded.", on: true },
-  { t: "Low balance", d: "Alert me when my wallet drops below $10.", on: true },
+  { t: "Low balance", d: "Alert me when my wallet drops below ₦15,000.", on: true },
   { t: "Product updates", d: "Occasional emails about new countries and services.", on: false },
 ];
 
@@ -121,7 +121,7 @@ function SettingsPage() {
               <Select defaultValue="usd">
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="usd">USD ($)</SelectItem>
+                  <SelectItem value="ngn">NGN (₦)</SelectItem>
                   <SelectItem value="eur">EUR (€)</SelectItem>
                   <SelectItem value="ngn">NGN (₦)</SelectItem>
                 </SelectContent>

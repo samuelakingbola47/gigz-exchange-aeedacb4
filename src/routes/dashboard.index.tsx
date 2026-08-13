@@ -13,6 +13,8 @@ import { StatCard } from "@/components/app/StatCard";
 import { StatusBadge } from "@/components/app/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { orders, transactions, statusLabels } from "@/lib/mock-data";
+import { ngn } from "@/lib/currency";
+import { ServiceIcon } from "@/components/brand/ServiceIcon";
 
 export const Route = createFileRoute("/dashboard/")({
   head: () => ({
@@ -29,7 +31,7 @@ export const Route = createFileRoute("/dashboard/")({
 const activity = [
   { at: "14:02", text: "Purchased WhatsApp number · United States" },
   { at: "13:41", text: "SMS received for order GX-90408" },
-  { at: "09:15", text: "Wallet topped up with $50.00 (demo)" },
+  { at: "09:15", text: "Wallet topped up with ₦75,000 (demo)" },
   { at: "Yesterday", text: "API key gx_live_••••7f21 generated" },
   { at: "Yesterday", text: "Signed in from Chrome · macOS" },
 ];
@@ -47,10 +49,10 @@ function DashboardHome() {
       }
     >
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard label="Wallet balance" value="$128.34" icon={Wallet} hint="Available to spend" />
+        <StatCard label="Wallet balance" value="₦192,510" icon={Wallet} hint="Available to spend" />
         <StatCard label="Active orders" value="2" icon={ListChecks} hint="1 waiting for SMS" />
         <StatCard label="Completed orders" value="1,284" icon={CheckCircle2} trend="+12%" hint="vs last month" />
-        <StatCard label="Total spent" value="$742.19" icon={CreditCard} hint="Lifetime" />
+        <StatCard label="Total spent" value="₦1,113,290" icon={CreditCard} hint="Lifetime" />
       </div>
 
       <div className="mt-6 grid gap-5 xl:grid-cols-3">
@@ -64,13 +66,13 @@ function DashboardHome() {
           <ul className="divide-y divide-border">
             {orders.slice(0, 6).map((o) => (
               <li key={o.id} className="flex flex-wrap items-center gap-3 px-5 py-3.5">
-                <span className="text-xl">{o.flag}</span>
+                <ServiceIcon service={o.service} size="md" />
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold">{o.service} · {o.country}</p>
                   <p className="truncate text-xs text-muted-foreground">{o.number} · {o.id}</p>
                 </div>
                 <StatusBadge status={o.status} label={statusLabels[o.status]} />
-                <span className="w-16 text-right text-sm font-semibold">${o.price.toFixed(2)}</span>
+                <span className="w-16 text-right text-sm font-semibold">{ngn(o.price)}</span>
               </li>
             ))}
           </ul>
@@ -129,7 +131,7 @@ function DashboardHome() {
               </div>
               <StatusBadge status={t.status} />
               <span className={t.amount >= 0 ? "w-20 text-right text-sm font-semibold text-success" : "w-20 text-right text-sm font-semibold"}>
-                {t.amount >= 0 ? "+" : "−"}${Math.abs(t.amount).toFixed(2)}
+                {t.amount >= 0 ? "+" : "−"}{ngn(Math.abs(t.amount))}
               </span>
             </li>
           ))}

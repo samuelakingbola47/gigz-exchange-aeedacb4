@@ -36,7 +36,7 @@ function AdminSettings() {
           <div className="mt-5 space-y-4">
             <div className="space-y-2"><Label htmlFor="s-name">Platform name</Label><Input id="s-name" defaultValue="Gigz Exchange" /></div>
             <div className="space-y-2"><Label htmlFor="s-email">Support email</Label><Input id="s-email" defaultValue="support@gigzexchange.com" /></div>
-            <div className="space-y-2"><Label htmlFor="s-min">Minimum deposit ($)</Label><Input id="s-min" defaultValue="5.00" /></div>
+            <div className="space-y-2"><Label htmlFor="s-min">Minimum deposit (₦)</Label><Input id="s-min" defaultValue="1500" /></div>
             <div className="space-y-2"><Label htmlFor="s-note">Announcement banner</Label><Textarea id="s-note" rows={3} placeholder="Shown at the top of the customer dashboard" /></div>
           </div>
           <Button type="submit" className="mt-6">Save settings</Button>

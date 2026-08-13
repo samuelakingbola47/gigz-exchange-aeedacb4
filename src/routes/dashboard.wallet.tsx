@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { transactions } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
+import { ngn } from "@/lib/currency";
 
 export const Route = createFileRoute("/dashboard/wallet")({
   head: () => ({
@@ -33,7 +34,7 @@ const methods = [
 ];
 
 function WalletPage() {
-  const [amount, setAmount] = useState("50");
+  const [amount, setAmount] = useState("15000");
   const [method, setMethod] = useState("card");
   const [open, setOpen] = useState(false);
 
@@ -53,10 +54,10 @@ function WalletPage() {
             </DialogHeader>
             <div className="space-y-5">
               <div className="space-y-2">
-                <Label htmlFor="amt">Amount (USD)</Label>
+                <Label htmlFor="amt">Amount (₦)</Label>
                 <Input id="amt" value={amount} onChange={(e) => setAmount(e.target.value)} inputMode="decimal" />
                 <div className="flex gap-2 pt-1">
-                  {["10", "25", "50", "100"].map((a) => (
+                  {["5000", "10000", "25000", "50000"].map((a) => (
                     <button
                       key={a}
                       onClick={() => setAmount(a)}
@@ -65,7 +66,7 @@ function WalletPage() {
                         amount === a ? "border-accent bg-accent/10" : "border-border hover:bg-secondary",
                       )}
                     >
-                      ${a}
+                      {ngn(Number(a))}
                     </button>
                   ))}
                 </div>
@@ -97,7 +98,7 @@ function WalletPage() {
               <Button
                 onClick={() => {
                   setOpen(false);
-                  toast.success(`Deposit of $${amount} simulated`, { description: "No real payment was processed." });
+                  toast.success(`Deposit of ${ngn(Number(amount) || 0)} simulated`, { description: "No real payment was processed." });
                 }}
               >
                 Confirm deposit
@@ -114,7 +115,7 @@ function WalletPage() {
             <p className="flex items-center gap-2 text-xs uppercase tracking-[0.16em] text-ink-foreground/60">
               <Wallet className="h-4 w-4 text-accent" /> Current balance
             </p>
-            <p className="mt-3 font-display text-5xl font-bold">$128.34</p>
+            <p className="mt-3 font-display text-5xl font-bold">₦192,510</p>
             <p className="mt-2 text-sm text-ink-foreground/60">Account ID · GX-USR-10241</p>
             <div className="mt-8 flex flex-wrap gap-2">
               <Button onClick={() => setOpen(true)}>Add funds</Button>
@@ -125,8 +126,8 @@ function WalletPage() {
           </div>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
-          <StatCard label="Total deposited" value="$870.53" hint="Lifetime deposits" />
-          <StatCard label="Total spent" value="$742.19" hint="Across 1,284 orders" />
+          <StatCard label="Total deposited" value="₦1,305,800" hint="Lifetime deposits" />
+          <StatCard label="Total spent" value="₦1,113,290" hint="Across 1,284 orders" />
         </div>
       </div>
 
@@ -144,7 +145,7 @@ function WalletPage() {
               </div>
               <StatusBadge status={t.status} />
               <span className={t.amount >= 0 ? "w-20 text-right text-sm font-semibold text-success" : "w-20 text-right text-sm font-semibold"}>
-                {t.amount >= 0 ? "+" : "−"}${Math.abs(t.amount).toFixed(2)}
+                {t.amount >= 0 ? "+" : "−"}{ngn(Math.abs(t.amount))}
               </span>
             </li>
           ))}

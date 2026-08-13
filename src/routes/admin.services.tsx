@@ -6,6 +6,7 @@ import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { services } from "@/lib/mock-data";
+import { ServiceIcon } from "@/components/brand/ServiceIcon";
 
 export const Route = createFileRoute("/admin/services")({
   head: () => ({
@@ -37,7 +38,7 @@ function AdminServices() {
           <TableBody>
             {services.map((s) => (
               <TableRow key={s.id}>
-                <TableCell><span className="mr-2">{s.emoji}</span>{s.name}</TableCell>
+                <TableCell><ServiceIcon service={s.id} size="sm" plain className="mr-2 inline-block align-[-3px]" />{s.name}</TableCell>
                 <TableCell className="text-muted-foreground">{s.category}</TableCell>
                 <TableCell className="text-right tabular-nums">{s.numbers.toLocaleString()}</TableCell>
                 <TableCell><Input defaultValue={s.price.toFixed(2)} className="h-8 w-24" /></TableCell>

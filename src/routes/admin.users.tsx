@@ -13,6 +13,7 @@ import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { adminUsers } from "@/lib/mock-data";
+import { ngn } from "@/lib/currency";
 
 export const Route = createFileRoute("/admin/users")({
   head: () => ({
@@ -78,7 +79,7 @@ function AdminUsers() {
                     </TableCell>
                     <TableCell className="font-mono text-xs">{u.id}</TableCell>
                     <TableCell><StatusBadge status={u.status} /></TableCell>
-                    <TableCell className="text-right tabular-nums">${u.balance.toFixed(2)}</TableCell>
+                    <TableCell className="text-right tabular-nums">{ngn(u.balance)}</TableCell>
                     <TableCell className="text-right tabular-nums">{u.orders}</TableCell>
                     <TableCell className="text-muted-foreground">{u.joined}</TableCell>
                     <TableCell className="text-right">

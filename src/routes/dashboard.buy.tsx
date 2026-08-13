@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Check, Copy, Loader2, MessageSquareText, RefreshCw, Search, Timer, X } from "lucide-react";
@@ -8,6 +9,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { countries, services } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
+import { ngn } from "@/lib/currency";
+import { ServiceIcon } from "@/components/brand/ServiceIcon";
+import { CountryFlag } from "@/components/brand/CountryFlag";
 
 export const Route = createFileRoute("/dashboard/buy")({
   head: () => ({
@@ -109,14 +113,14 @@ function BuyNumber() {
                 countryId === c.id ? "bg-ink text-ink-foreground" : "hover:bg-secondary",
               )}
             >
-              <span className="text-lg">{c.flag}</span>
+              <CountryFlag country={c.id} name={c.name} size="md" />
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-sm font-medium">{c.name}</span>
                 <span className={cn("block text-xs", countryId === c.id ? "text-ink-foreground/60" : "text-muted-foreground")}>
                   {c.numbers.toLocaleString()} available
                 </span>
               </span>
-              <span className="text-sm font-semibold">${c.price.toFixed(2)}</span>
+              <span className="text-sm font-semibold">{ngn(c.price)}</span>
             </button>
           ))}
         </Panel>
@@ -131,14 +135,14 @@ function BuyNumber() {
                 serviceId === s.id ? "bg-ink text-ink-foreground" : "hover:bg-secondary",
               )}
             >
-              <span className="text-lg">{s.emoji}</span>
+              <ServiceIcon service={s.id} size="sm" />
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-sm font-medium">{s.name}</span>
                 <span className={cn("block text-xs capitalize", serviceId === s.id ? "text-ink-foreground/60" : "text-muted-foreground")}>
                   {s.availability} availability
                 </span>
               </span>
-              <span className="text-sm font-semibold">${s.price.toFixed(2)}</span>
+              <span className="text-sm font-semibold">{ngn(s.price)}</span>
             </button>
           ))}
         </Panel>
@@ -147,11 +151,11 @@ function BuyNumber() {
           <div className="surface-card p-5">
             <h3 className="text-sm font-semibold">Order summary</h3>
             <dl className="mt-4 space-y-3 text-sm">
-              <Row label="Country" value={country ? `${country.flag} ${country.name}` : "—"} />
-              <Row label="Service" value={service ? `${service.emoji} ${service.name}` : "—"} />
+              <Row label="Country" value={country ? <span className="flex items-center gap-2"><CountryFlag country={country.id} name={country.name} size="sm" />{country.name}</span> : "—"} />
+              <Row label="Service" value={service ? <span className="flex items-center gap-2"><ServiceIcon service={service.id} size="sm" plain />{service.name}</span> : "—"} />
               <Row label="Duration" value="20 minutes" />
               <div className="border-t border-border pt-3">
-                <Row label="Total" value={country && service ? `$${price.toFixed(2)}` : "—"} strong />
+                <Row label="Total" value={country && service ? `${ngn(price)}` : "—"} strong />
               </div>
             </dl>
             <Button
@@ -264,7 +268,7 @@ function SearchInput({ value, onChange, placeholder }: { value: string; onChange
   );
 }
 
-function Row({ label, value, strong }: { label: string; value: string; strong?: boolean }) {
+function Row({ label, value, strong }: { label: string; value: ReactNode; strong?: boolean }) {
   return (
     <div className="flex items-center justify-between gap-3">
       <dt className="text-muted-foreground">{label}</dt>

@@ -8,6 +8,9 @@ import { StatCard } from "@/components/app/StatCard";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { countries, revenueSeries, services, userGrowth } from "@/lib/mock-data";
+import { ngn } from "@/lib/currency";
+import { ServiceIcon } from "@/components/brand/ServiceIcon";
+import { CountryFlag } from "@/components/brand/CountryFlag";
 
 export const Route = createFileRoute("/admin/reports")({
   head: () => ({
@@ -31,7 +34,7 @@ function AdminReports() {
       actions={<Button variant="outline" onClick={() => toast("Report export queued (demo)")}>Export report</Button>}
     >
       <div className="grid gap-4 sm:grid-cols-4">
-        <StatCard label="Revenue (Aug)" value="$39,900" trend="+14.8%" />
+        <StatCard label="Revenue (Aug)" value="₦59.9M" trend="+14.8%" />
         <StatCard label="Orders (Aug)" value="42,600" trend="+11.5%" />
         <StatCard label="New users (Aug)" value="1,420" trend="+15.1%" />
         <StatCard label="Success rate" value="98.6%" hint="Delivered codes" />
@@ -77,9 +80,9 @@ function AdminReports() {
             <TableBody>
               {services.slice(0, 6).map((s, i) => (
                 <TableRow key={s.id}>
-                  <TableCell><span className="mr-2">{s.emoji}</span>{s.name}</TableCell>
+                  <TableCell><ServiceIcon service={s.id} size="sm" plain className="mr-2 inline-block align-[-3px]" />{s.name}</TableCell>
                   <TableCell className="text-right tabular-nums">{(9800 - i * 1100).toLocaleString()}</TableCell>
-                  <TableCell className="text-right tabular-nums">${((9800 - i * 1100) * s.price).toFixed(0)}</TableCell>
+                  <TableCell className="text-right tabular-nums">{ngn(((9800 - i * 1100) * s.price))}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -92,9 +95,9 @@ function AdminReports() {
             <TableBody>
               {countries.slice(0, 6).map((c, i) => (
                 <TableRow key={c.id}>
-                  <TableCell><span className="mr-2">{c.flag}</span>{c.name}</TableCell>
+                  <TableCell><CountryFlag country={c.id} name={c.name} size="sm" className="mr-2 inline-block align-[-3px]" />{c.name}</TableCell>
                   <TableCell className="text-right tabular-nums">{(8600 - i * 950).toLocaleString()}</TableCell>
-                  <TableCell className="text-right tabular-nums">${((8600 - i * 950) * c.price).toFixed(0)}</TableCell>
+                  <TableCell className="text-right tabular-nums">{ngn(((8600 - i * 950) * c.price))}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

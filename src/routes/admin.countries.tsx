@@ -6,6 +6,7 @@ import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { countries } from "@/lib/mock-data";
+import { CountryFlag } from "@/components/brand/CountryFlag";
 
 export const Route = createFileRoute("/admin/countries")({
   head: () => ({
@@ -37,7 +38,7 @@ function AdminCountries() {
           <TableBody>
             {countries.map((c) => (
               <TableRow key={c.id}>
-                <TableCell><span className="mr-2">{c.flag}</span>{c.name} <span className="text-xs text-muted-foreground">{c.dial}</span></TableCell>
+                <TableCell><CountryFlag country={c.id} name={c.name} size="sm" className="mr-2 inline-block align-[-3px]" />{c.name} <span className="text-xs text-muted-foreground">{c.dial}</span></TableCell>
                 <TableCell className="text-muted-foreground">{c.region}</TableCell>
                 <TableCell className="text-right tabular-nums">{c.numbers.toLocaleString()}</TableCell>
                 <TableCell><Input defaultValue={c.price.toFixed(2)} className="h-8 w-24" /></TableCell>

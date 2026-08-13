@@ -124,7 +124,7 @@ export function AppShell({
             <div className="ml-auto flex items-center gap-2 sm:gap-3">
               <div className="hidden items-center gap-2 rounded-xl border border-border bg-card px-3 py-2 sm:flex">
                 <Wallet className="h-4 w-4 text-accent" />
-                <span className="text-sm font-semibold">$128.34</span>
+                <span className="text-sm font-semibold">₦192,510</span>
               </div>
               <button className="relative grid h-10 w-10 place-items-center rounded-xl border border-border bg-card">
                 <Bell className="h-4 w-4" />

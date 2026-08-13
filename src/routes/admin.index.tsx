@@ -2,11 +2,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import {
   Area, AreaChart, Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
-import { Activity, DollarSign, Package, ShoppingCart, Users } from "lucide-react";
+import { Activity, Banknote, Package, ShoppingCart, Users } from "lucide-react";
 import { AdminShell } from "@/components/app/CustomerShell";
 import { StatCard } from "@/components/app/StatCard";
 import { StatusBadge } from "@/components/app/StatusBadge";
 import { orders, revenueSeries, statusLabels, userGrowth } from "@/lib/mock-data";
+import { ServiceIcon } from "@/components/brand/ServiceIcon";
 
 export const Route = createFileRoute("/admin/")({
   head: () => ({
@@ -29,7 +30,7 @@ function AdminOverview() {
         <StatCard label="Total users" value="10,820" icon={Users} trend="+8.4%" hint="vs last month" />
         <StatCard label="Active users (30d)" value="6,412" icon={Activity} trend="+5.1%" hint="logged in" />
         <StatCard label="Total orders" value="213,904" icon={ShoppingCart} trend="+11%" hint="lifetime" />
-        <StatCard label="Revenue (Aug)" value="$39,900" icon={DollarSign} trend="+14.8%" hint="month to date" />
+        <StatCard label="Revenue (Aug)" value="₦59.9M" icon={Banknote} trend="+14.8%" hint="month to date" />
       </div>
       <div className="mt-4 grid gap-4 sm:grid-cols-3">
         <StatCard label="Pending orders" value="48" hint="Awaiting SMS" />
@@ -40,7 +41,7 @@ function AdminOverview() {
       <div className="mt-6 grid gap-5 xl:grid-cols-3">
         <div className="surface-card p-5 xl:col-span-2">
           <h2 className="text-sm font-semibold">Revenue</h2>
-          <p className="text-xs text-muted-foreground">Monthly gross revenue (USD)</p>
+          <p className="text-xs text-muted-foreground">Monthly gross revenue (₦)</p>
           <div className="mt-5 h-64">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={revenueSeries}>
@@ -98,7 +99,7 @@ function AdminOverview() {
           <ul className="divide-y divide-border">
             {orders.slice(0, 6).map((o) => (
               <li key={o.id} className="flex items-center gap-3 px-5 py-3.5">
-                <span className="text-lg">{o.flag}</span>
+                <ServiceIcon service={o.service} size="sm" />
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold">{o.id} · {o.service}</p>
                   <p className="truncate text-xs text-muted-foreground">{o.number}</p>
