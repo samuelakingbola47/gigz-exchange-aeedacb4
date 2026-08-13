@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Check, Copy, Loader2, MessageSquareText, RefreshCw, Search, Timer, X } from "lucide-react";
@@ -150,8 +151,8 @@ function BuyNumber() {
           <div className="surface-card p-5">
             <h3 className="text-sm font-semibold">Order summary</h3>
             <dl className="mt-4 space-y-3 text-sm">
-              <Row label="Country" value={country ? `${country.flag} ${country.name}` : "—"} />
-              <Row label="Service" value={service ? `${service.emoji} ${service.name}` : "—"} />
+              <Row label="Country" value={country ? <span className="flex items-center gap-2"><CountryFlag country={country.id} name={country.name} size="sm" />{country.name}</span> : "—"} />
+              <Row label="Service" value={service ? <span className="flex items-center gap-2"><ServiceIcon service={service.id} size="sm" plain />{service.name}</span> : "—"} />
               <Row label="Duration" value="20 minutes" />
               <div className="border-t border-border pt-3">
                 <Row label="Total" value={country && service ? `${ngn(price)}` : "—"} strong />
@@ -267,7 +268,7 @@ function SearchInput({ value, onChange, placeholder }: { value: string; onChange
   );
 }
 
-function Row({ label, value, strong }: { label: string; value: string; strong?: boolean }) {
+function Row({ label, value, strong }: { label: string; value: ReactNode; strong?: boolean }) {
   return (
     <div className="flex items-center justify-between gap-3">
       <dt className="text-muted-foreground">{label}</dt>
