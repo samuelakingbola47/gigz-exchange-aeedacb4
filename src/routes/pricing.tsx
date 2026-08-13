@@ -4,6 +4,7 @@ import { PublicLayout } from "@/components/site/PublicLayout";
 import { PageHero } from "@/components/site/PageHero";
 import { Button } from "@/components/ui/button";
 import { countries } from "@/lib/mock-data";
+import { ngn } from "@/lib/currency";
 import {
   Table,
   TableBody,
@@ -153,7 +154,7 @@ function PricingPage() {
                       {c.name}
                     </TableCell>
                     <TableCell className="capitalize text-muted-foreground">{c.availability}</TableCell>
-                    <TableCell className="text-right font-semibold">${c.price.toFixed(2)}</TableCell>
+                    <TableCell className="text-right font-semibold">{ngn(c.price)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

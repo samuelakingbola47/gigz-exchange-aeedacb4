@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { EmptyState } from "@/components/app/EmptyState";
 import { countries } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
+import { ngn } from "@/lib/currency";
 
 export const Route = createFileRoute("/countries")({
   head: () => ({
@@ -99,7 +100,7 @@ function CountriesPage() {
                   </div>
                   <div>
                     <dt className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground">From</dt>
-                    <dd className="mt-0.5 font-semibold">${c.price.toFixed(2)}</dd>
+                    <dd className="mt-0.5 font-semibold">{ngn(c.price)}</dd>
                   </div>
                 </dl>
                 <Button asChild size="sm" variant="outline" className="mt-4 w-full">

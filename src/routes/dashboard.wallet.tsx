@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { transactions } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
+import { ngn } from "@/lib/currency";
 
 export const Route = createFileRoute("/dashboard/wallet")({
   head: () => ({
@@ -144,7 +145,7 @@ function WalletPage() {
               </div>
               <StatusBadge status={t.status} />
               <span className={t.amount >= 0 ? "w-20 text-right text-sm font-semibold text-success" : "w-20 text-right text-sm font-semibold"}>
-                {t.amount >= 0 ? "+" : "−"}${Math.abs(t.amount).toFixed(2)}
+                {t.amount >= 0 ? "+" : "−"}{ngn(Math.abs(t.amount))}
               </span>
             </li>
           ))}

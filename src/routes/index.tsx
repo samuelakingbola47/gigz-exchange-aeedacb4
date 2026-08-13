@@ -21,6 +21,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { services, countries } from "@/lib/mock-data";
+import { ngn } from "@/lib/currency";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -167,7 +168,7 @@ function Home() {
                   <p className="text-xs text-muted-foreground">{s.category}</p>
                 </div>
               </div>
-              <p className="text-sm font-semibold">${s.price.toFixed(2)}</p>
+              <p className="text-sm font-semibold">{ngn(s.price)}</p>
             </div>
           ))}
         </div>
@@ -191,7 +192,7 @@ function Home() {
                 </div>
               </div>
               <p className="mt-3 text-xs text-muted-foreground">
-                from <span className="font-semibold text-foreground">${c.price.toFixed(2)}</span>
+                from <span className="font-semibold text-foreground">{ngn(c.price)}</span>
               </p>
             </div>
           ))}

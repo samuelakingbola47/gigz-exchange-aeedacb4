@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { countries, services } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
+import { ngn } from "@/lib/currency";
 
 export const Route = createFileRoute("/dashboard/buy")({
   head: () => ({
@@ -116,7 +117,7 @@ function BuyNumber() {
                   {c.numbers.toLocaleString()} available
                 </span>
               </span>
-              <span className="text-sm font-semibold">${c.price.toFixed(2)}</span>
+              <span className="text-sm font-semibold">{ngn(c.price)}</span>
             </button>
           ))}
         </Panel>
@@ -138,7 +139,7 @@ function BuyNumber() {
                   {s.availability} availability
                 </span>
               </span>
-              <span className="text-sm font-semibold">${s.price.toFixed(2)}</span>
+              <span className="text-sm font-semibold">{ngn(s.price)}</span>
             </button>
           ))}
         </Panel>
@@ -151,7 +152,7 @@ function BuyNumber() {
               <Row label="Service" value={service ? `${service.emoji} ${service.name}` : "—"} />
               <Row label="Duration" value="20 minutes" />
               <div className="border-t border-border pt-3">
-                <Row label="Total" value={country && service ? `$${price.toFixed(2)}` : "—"} strong />
+                <Row label="Total" value={country && service ? `${ngn(price)}` : "—"} strong />
               </div>
             </dl>
             <Button

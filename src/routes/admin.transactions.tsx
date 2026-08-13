@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { transactions } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
+import { ngn } from "@/lib/currency";
 
 export const Route = createFileRoute("/admin/transactions")({
   head: () => ({
@@ -55,7 +56,7 @@ function AdminTransactions() {
                 <TableCell>{t.description}</TableCell>
                 <TableCell><StatusBadge status={t.status} /></TableCell>
                 <TableCell className={cn("text-right font-semibold tabular-nums", t.amount >= 0 ? "text-success" : "text-foreground")}>
-                  {t.amount >= 0 ? "+" : "−"}${Math.abs(t.amount).toFixed(2)}
+                  {t.amount >= 0 ? "+" : "−"}{ngn(Math.abs(t.amount))}
                 </TableCell>
               </TableRow>
             ))}

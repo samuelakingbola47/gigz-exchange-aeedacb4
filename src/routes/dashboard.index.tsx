@@ -13,6 +13,7 @@ import { StatCard } from "@/components/app/StatCard";
 import { StatusBadge } from "@/components/app/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { orders, transactions, statusLabels } from "@/lib/mock-data";
+import { ngn } from "@/lib/currency";
 
 export const Route = createFileRoute("/dashboard/")({
   head: () => ({
@@ -70,7 +71,7 @@ function DashboardHome() {
                   <p className="truncate text-xs text-muted-foreground">{o.number} · {o.id}</p>
                 </div>
                 <StatusBadge status={o.status} label={statusLabels[o.status]} />
-                <span className="w-16 text-right text-sm font-semibold">${o.price.toFixed(2)}</span>
+                <span className="w-16 text-right text-sm font-semibold">{ngn(o.price)}</span>
               </li>
             ))}
           </ul>
@@ -129,7 +130,7 @@ function DashboardHome() {
               </div>
               <StatusBadge status={t.status} />
               <span className={t.amount >= 0 ? "w-20 text-right text-sm font-semibold text-success" : "w-20 text-right text-sm font-semibold"}>
-                {t.amount >= 0 ? "+" : "−"}${Math.abs(t.amount).toFixed(2)}
+                {t.amount >= 0 ? "+" : "−"}{ngn(Math.abs(t.amount))}
               </span>
             </li>
           ))}

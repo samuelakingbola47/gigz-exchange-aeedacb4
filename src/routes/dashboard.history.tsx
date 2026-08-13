@@ -13,6 +13,7 @@ import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import { orders, statusLabels } from "@/lib/mock-data";
+import { ngn } from "@/lib/currency";
 
 export const Route = createFileRoute("/dashboard/history")({
   head: () => ({
@@ -96,7 +97,7 @@ function OrderHistory() {
                     <TableCell>{o.flag} {o.country}</TableCell>
                     <TableCell>{o.service}</TableCell>
                     <TableCell>{o.number}</TableCell>
-                    <TableCell>${o.price.toFixed(2)}</TableCell>
+                    <TableCell>{ngn(o.price)}</TableCell>
                     <TableCell><StatusBadge status={o.status} label={statusLabels[o.status]} /></TableCell>
                   </TableRow>
                 ))}
@@ -116,7 +117,7 @@ function OrderHistory() {
                 </div>
                 <div className="mt-3 flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">{o.number}</span>
-                  <span className="font-semibold">${o.price.toFixed(2)}</span>
+                  <span className="font-semibold">{ngn(o.price)}</span>
                 </div>
               </div>
             ))}

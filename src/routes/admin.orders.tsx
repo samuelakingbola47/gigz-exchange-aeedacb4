@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { orders, statusLabels, type OrderStatus } from "@/lib/mock-data";
+import { ngn } from "@/lib/currency";
 
 export const Route = createFileRoute("/admin/orders")({
   head: () => ({
@@ -83,7 +84,7 @@ function AdminOrders() {
                     <TableCell className="font-mono text-xs">{o.number}</TableCell>
                     <TableCell><StatusBadge status={o.status} label={statusLabels[o.status]} /></TableCell>
                     <TableCell className="font-mono text-xs">{o.code ?? "—"}</TableCell>
-                    <TableCell className="text-right tabular-nums">${o.price.toFixed(2)}</TableCell>
+                    <TableCell className="text-right tabular-nums">{ngn(o.price)}</TableCell>
                     <TableCell className="text-muted-foreground">{o.created}</TableCell>
                     <TableCell className="text-right">
                       <Button variant="ghost" size="sm" onClick={() => toast.success(`Refund issued for ${o.id} (demo)`)}>Refund</Button>

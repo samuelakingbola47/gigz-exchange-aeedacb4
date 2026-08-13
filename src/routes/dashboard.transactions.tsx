@@ -12,6 +12,7 @@ import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import { transactions } from "@/lib/mock-data";
+import { ngn } from "@/lib/currency";
 
 export const Route = createFileRoute("/dashboard/transactions")({
   head: () => ({
@@ -75,9 +76,9 @@ function TransactionsPage() {
                 <TableCell>{t.type}</TableCell>
                 <TableCell className="text-muted-foreground">{t.description}</TableCell>
                 <TableCell className={t.amount >= 0 ? "text-right font-semibold text-success" : "text-right font-semibold"}>
-                  {t.amount >= 0 ? "+" : "−"}${Math.abs(t.amount).toFixed(2)}
+                  {t.amount >= 0 ? "+" : "−"}{ngn(Math.abs(t.amount))}
                 </TableCell>
-                <TableCell className="text-right tabular-nums">${t.balance.toFixed(2)}</TableCell>
+                <TableCell className="text-right tabular-nums">{ngn(t.balance)}</TableCell>
                 <TableCell><StatusBadge status={t.status} /></TableCell>
               </TableRow>
             ))}
@@ -94,7 +95,7 @@ function TransactionsPage() {
                 <p className="text-xs text-muted-foreground">{t.description}</p>
               </div>
               <span className={t.amount >= 0 ? "text-sm font-semibold text-success" : "text-sm font-semibold"}>
-                {t.amount >= 0 ? "+" : "−"}${Math.abs(t.amount).toFixed(2)}
+                {t.amount >= 0 ? "+" : "−"}{ngn(Math.abs(t.amount))}
               </span>
             </div>
             <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">

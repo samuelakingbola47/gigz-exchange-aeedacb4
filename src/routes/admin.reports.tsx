@@ -8,6 +8,7 @@ import { StatCard } from "@/components/app/StatCard";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { countries, revenueSeries, services, userGrowth } from "@/lib/mock-data";
+import { ngn } from "@/lib/currency";
 
 export const Route = createFileRoute("/admin/reports")({
   head: () => ({
@@ -79,7 +80,7 @@ function AdminReports() {
                 <TableRow key={s.id}>
                   <TableCell><span className="mr-2">{s.emoji}</span>{s.name}</TableCell>
                   <TableCell className="text-right tabular-nums">{(9800 - i * 1100).toLocaleString()}</TableCell>
-                  <TableCell className="text-right tabular-nums">${((9800 - i * 1100) * s.price).toFixed(0)}</TableCell>
+                  <TableCell className="text-right tabular-nums">{ngn(((9800 - i * 1100) * s.price))}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -94,7 +95,7 @@ function AdminReports() {
                 <TableRow key={c.id}>
                   <TableCell><span className="mr-2">{c.flag}</span>{c.name}</TableCell>
                   <TableCell className="text-right tabular-nums">{(8600 - i * 950).toLocaleString()}</TableCell>
-                  <TableCell className="text-right tabular-nums">${((8600 - i * 950) * c.price).toFixed(0)}</TableCell>
+                  <TableCell className="text-right tabular-nums">{ngn(((8600 - i * 950) * c.price))}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

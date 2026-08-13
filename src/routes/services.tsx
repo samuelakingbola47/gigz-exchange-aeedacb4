@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { EmptyState } from "@/components/app/EmptyState";
 import { services } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
+import { ngn } from "@/lib/currency";
 
 export const Route = createFileRoute("/services")({
   head: () => ({
@@ -102,7 +103,7 @@ function ServicesPage() {
                 <div className="mt-5 flex items-end justify-between border-t border-border pt-4">
                   <div>
                     <p className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground">Starting at</p>
-                    <p className="font-display text-xl font-bold">${s.price.toFixed(2)}</p>
+                    <p className="font-display text-xl font-bold">{ngn(s.price)}</p>
                   </div>
                   <Button asChild size="sm"><Link to="/dashboard/buy">Get Number</Link></Button>
                 </div>

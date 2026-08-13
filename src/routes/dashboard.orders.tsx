@@ -9,6 +9,7 @@ import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import { orders, statusLabels } from "@/lib/mock-data";
+import { ngn } from "@/lib/currency";
 
 export const Route = createFileRoute("/dashboard/orders")({
   head: () => ({
@@ -62,7 +63,7 @@ function ActiveOrders() {
                     <TableCell>{o.flag} {o.country}</TableCell>
                     <TableCell>{o.service}</TableCell>
                     <TableCell className="font-medium">{o.number}</TableCell>
-                    <TableCell>${o.price.toFixed(2)}</TableCell>
+                    <TableCell>{ngn(o.price)}</TableCell>
                     <TableCell><StatusBadge status={o.status} label={statusLabels[o.status]} /></TableCell>
                     <TableCell className="text-muted-foreground">{o.created}</TableCell>
                     <TableCell className="tabular-nums">{o.expires}</TableCell>
@@ -95,7 +96,7 @@ function ActiveOrders() {
                 <p className="mt-4 font-display text-lg font-bold">{o.number}</p>
                 {o.code ? <p className="mt-1 text-sm text-accent">Code: <span className="font-bold tracking-[0.2em]">{o.code}</span></p> : null}
                 <dl className="mt-4 grid grid-cols-3 gap-2 border-t border-border pt-3 text-xs">
-                  <div><dt className="text-muted-foreground">Price</dt><dd className="font-semibold">${o.price.toFixed(2)}</dd></div>
+                  <div><dt className="text-muted-foreground">Price</dt><dd className="font-semibold">{ngn(o.price)}</dd></div>
                   <div><dt className="text-muted-foreground">Created</dt><dd className="font-semibold">{o.created.slice(11)}</dd></div>
                   <div><dt className="text-muted-foreground">Expires</dt><dd className="font-semibold">{o.expires}</dd></div>
                 </dl>
