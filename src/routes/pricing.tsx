@@ -5,6 +5,7 @@ import { PageHero } from "@/components/site/PageHero";
 import { Button } from "@/components/ui/button";
 import { countries } from "@/lib/mock-data";
 import { ngn } from "@/lib/currency";
+import { CountryFlag } from "@/components/brand/CountryFlag";
 import {
   Table,
   TableBody,
@@ -150,7 +151,7 @@ function PricingPage() {
                 {countries.slice(0, 6).map((c) => (
                   <TableRow key={c.id}>
                     <TableCell className="font-medium">
-                      <span className="mr-2">{c.flag}</span>
+                      <CountryFlag country={c.id} name={c.name} size="sm" className="mr-2 inline-block align-[-3px]" />
                       {c.name}
                     </TableCell>
                     <TableCell className="capitalize text-muted-foreground">{c.availability}</TableCell>

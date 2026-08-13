@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/table";
 import { orders, statusLabels } from "@/lib/mock-data";
 import { ngn } from "@/lib/currency";
+import { ServiceIcon } from "@/components/brand/ServiceIcon";
+import { CountryFlag } from "@/components/brand/CountryFlag";
 
 export const Route = createFileRoute("/dashboard/history")({
   head: () => ({
@@ -94,7 +96,7 @@ function OrderHistory() {
                   <TableRow key={o.id}>
                     <TableCell className="font-medium">{o.id}</TableCell>
                     <TableCell className="text-muted-foreground">{o.created}</TableCell>
-                    <TableCell>{o.flag} {o.country}</TableCell>
+                    <TableCell><span className="flex items-center gap-2"><CountryFlag country={o.country} size="sm" />{o.country}</span></TableCell>
                     <TableCell>{o.service}</TableCell>
                     <TableCell>{o.number}</TableCell>
                     <TableCell>{ngn(o.price)}</TableCell>
@@ -110,7 +112,7 @@ function OrderHistory() {
               <div key={o.id} className="surface-card p-4">
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="text-sm font-semibold">{o.flag} {o.service}</p>
+                    <p className="flex items-center gap-2 text-sm font-semibold"><ServiceIcon service={o.service} size="sm" plain />{o.service}</p>
                     <p className="text-xs text-muted-foreground">{o.id} · {o.created}</p>
                   </div>
                   <StatusBadge status={o.status} label={statusLabels[o.status]} />

@@ -7,6 +7,7 @@ import { AdminShell } from "@/components/app/CustomerShell";
 import { StatCard } from "@/components/app/StatCard";
 import { StatusBadge } from "@/components/app/StatusBadge";
 import { orders, revenueSeries, statusLabels, userGrowth } from "@/lib/mock-data";
+import { ServiceIcon } from "@/components/brand/ServiceIcon";
 
 export const Route = createFileRoute("/admin/")({
   head: () => ({
@@ -98,7 +99,7 @@ function AdminOverview() {
           <ul className="divide-y divide-border">
             {orders.slice(0, 6).map((o) => (
               <li key={o.id} className="flex items-center gap-3 px-5 py-3.5">
-                <span className="text-lg">{o.flag}</span>
+                <ServiceIcon service={o.service} size="sm" />
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold">{o.id} · {o.service}</p>
                   <p className="truncate text-xs text-muted-foreground">{o.number}</p>

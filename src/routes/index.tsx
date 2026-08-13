@@ -22,6 +22,8 @@ import {
 } from "@/components/ui/accordion";
 import { services, countries } from "@/lib/mock-data";
 import { ngn } from "@/lib/currency";
+import { ServiceIcon } from "@/components/brand/ServiceIcon";
+import { CountryFlag } from "@/components/brand/CountryFlag";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -162,7 +164,7 @@ function Home() {
           {services.slice(0, 9).map((s) => (
             <div key={s.id} className="flex items-center justify-between rounded-2xl border border-border bg-card px-4 py-3.5 transition-colors hover:border-accent/50">
               <div className="flex items-center gap-3">
-                <span className="grid h-9 w-9 place-items-center rounded-xl bg-secondary text-base">{s.emoji}</span>
+                <ServiceIcon service={s.id} size="sm" />
                 <div>
                   <p className="text-sm font-semibold">{s.name}</p>
                   <p className="text-xs text-muted-foreground">{s.category}</p>
@@ -185,7 +187,7 @@ function Home() {
           {countries.slice(0, 8).map((c) => (
             <div key={c.id} className="surface-card px-4 py-4 transition-shadow hover:shadow-[var(--shadow-lift)]">
               <div className="flex items-center gap-3">
-                <span className="text-2xl">{c.flag}</span>
+                <CountryFlag country={c.id} name={c.name} size="lg" />
                 <div>
                   <p className="text-sm font-semibold">{c.name}</p>
                   <p className="text-xs text-muted-foreground">{c.numbers.toLocaleString()} numbers</p>

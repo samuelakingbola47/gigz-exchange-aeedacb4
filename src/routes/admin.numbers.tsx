@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { countries } from "@/lib/mock-data";
+import { CountryFlag } from "@/components/brand/CountryFlag";
 
 export const Route = createFileRoute("/admin/numbers")({
   head: () => ({
@@ -54,7 +55,7 @@ function AdminNumbers() {
                 const util = 28 + ((i * 13) % 60);
                 return (
                   <TableRow key={c.id}>
-                    <TableCell><span className="mr-2">{c.flag}</span>{c.name}</TableCell>
+                    <TableCell><CountryFlag country={c.id} name={c.name} size="sm" className="mr-2 inline-block align-[-3px]" />{c.name}</TableCell>
                     <TableCell className="font-mono text-xs">{c.dial}</TableCell>
                     <TableCell className="text-right tabular-nums">{c.numbers.toLocaleString()}</TableCell>
                     <TableCell>

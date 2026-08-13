@@ -14,6 +14,7 @@ import { StatusBadge } from "@/components/app/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { orders, transactions, statusLabels } from "@/lib/mock-data";
 import { ngn } from "@/lib/currency";
+import { ServiceIcon } from "@/components/brand/ServiceIcon";
 
 export const Route = createFileRoute("/dashboard/")({
   head: () => ({
@@ -65,7 +66,7 @@ function DashboardHome() {
           <ul className="divide-y divide-border">
             {orders.slice(0, 6).map((o) => (
               <li key={o.id} className="flex flex-wrap items-center gap-3 px-5 py-3.5">
-                <span className="text-xl">{o.flag}</span>
+                <ServiceIcon service={o.service} size="md" />
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold">{o.service} · {o.country}</p>
                   <p className="truncate text-xs text-muted-foreground">{o.number} · {o.id}</p>

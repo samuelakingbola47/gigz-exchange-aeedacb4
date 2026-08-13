@@ -9,6 +9,7 @@ import { EmptyState } from "@/components/app/EmptyState";
 import { services } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
 import { ngn } from "@/lib/currency";
+import { ServiceIcon } from "@/components/brand/ServiceIcon";
 
 export const Route = createFileRoute("/services")({
   head: () => ({
@@ -93,7 +94,7 @@ function ServicesPage() {
             {list.map((s) => (
               <div key={s.id} className="surface-card group flex flex-col p-5 transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]">
                 <div className="flex items-start justify-between">
-                  <span className="grid h-12 w-12 place-items-center rounded-2xl bg-secondary text-xl">{s.emoji}</span>
+                  <ServiceIcon service={s.id} size="lg" />
                   <span className={cn("rounded-full px-2.5 py-1 text-[11px] font-semibold capitalize", availabilityTone[s.availability])}>
                     {s.availability} availability
                   </span>

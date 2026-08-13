@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import { countries, services } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
 import { ngn } from "@/lib/currency";
+import { ServiceIcon } from "@/components/brand/ServiceIcon";
+import { CountryFlag } from "@/components/brand/CountryFlag";
 
 export const Route = createFileRoute("/dashboard/buy")({
   head: () => ({
@@ -110,7 +112,7 @@ function BuyNumber() {
                 countryId === c.id ? "bg-ink text-ink-foreground" : "hover:bg-secondary",
               )}
             >
-              <span className="text-lg">{c.flag}</span>
+              <CountryFlag country={c.id} name={c.name} size="md" />
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-sm font-medium">{c.name}</span>
                 <span className={cn("block text-xs", countryId === c.id ? "text-ink-foreground/60" : "text-muted-foreground")}>
@@ -132,7 +134,7 @@ function BuyNumber() {
                 serviceId === s.id ? "bg-ink text-ink-foreground" : "hover:bg-secondary",
               )}
             >
-              <span className="text-lg">{s.emoji}</span>
+              <ServiceIcon service={s.id} size="sm" />
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-sm font-medium">{s.name}</span>
                 <span className={cn("block text-xs capitalize", serviceId === s.id ? "text-ink-foreground/60" : "text-muted-foreground")}>
