@@ -378,6 +378,35 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      cancel_demo_order: {
+        Args: { _order_id: string }
+        Returns: {
+          country: string
+          country_code: string
+          created_at: string
+          currency: string
+          expires_at: string | null
+          id: string
+          is_demo: boolean
+          order_reference: string
+          phone_number: string | null
+          price: number
+          provider_reference: string | null
+          service: string
+          service_code: string
+          sms_content: string | null
+          status: string
+          updated_at: string
+          user_id: string
+          verification_code: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "orders"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -385,6 +414,36 @@ export type Database = {
         }
         Returns: boolean
       }
+      purchase_demo_number: {
+        Args: { _country_code: string; _service_code: string }
+        Returns: {
+          country: string
+          country_code: string
+          created_at: string
+          currency: string
+          expires_at: string | null
+          id: string
+          is_demo: boolean
+          order_reference: string
+          phone_number: string | null
+          price: number
+          provider_reference: string | null
+          service: string
+          service_code: string
+          sms_content: string | null
+          status: string
+          updated_at: string
+          user_id: string
+          verification_code: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "orders"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      touch_last_login: { Args: never; Returns: undefined }
     }
     Enums: {
       app_role: "customer" | "admin"
