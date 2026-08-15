@@ -1,10 +1,9 @@
 import type { ReactNode } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Check, Copy, Loader2, MessageSquareText, Search, Timer, X } from "lucide-react";
+import { Check, Loader2, Search } from "lucide-react";
 import { toast } from "sonner";
 import { CustomerShell } from "@/components/app/CustomerShell";
-import { StatusBadge } from "@/components/app/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -13,7 +12,8 @@ import { ngn } from "@/lib/currency";
 import { ServiceIcon } from "@/components/brand/ServiceIcon";
 import { CountryFlag } from "@/components/brand/CountryFlag";
 import { useBuyNumber, useCancelOrder, useCountries, useOrders, useServices, useWallet } from "@/lib/queries";
-import { countdown, orderStatusLabel } from "@/lib/format";
+import { countdown } from "@/lib/format";
+import { SmsSessionPanel } from "@/components/sms/SmsSessionPanel";
 
 export const Route = createFileRoute("/dashboard/buy")({
   head: () => ({
@@ -63,7 +63,6 @@ function BuyNumber() {
   );
 
   const step = order ? 4 : service ? 3 : country ? 2 : 1;
-  const timeLeft = order ? countdown(order.expires_at) : "—";
   void tick;
 
   return (
@@ -193,69 +192,34 @@ function BuyNumber() {
               Your active order will appear here once you request a number.
             </div>
           ) : (
-            <div className="surface-card overflow-hidden">
-              <div className="flex items-center justify-between gap-2 border-b border-border px-5 py-4">
-                <h3 className="text-sm font-semibold">Active order</h3>
-                <StatusBadge status={order.status} label={orderStatusLabel(order.status)} />
-              </div>
-              <div className="space-y-4 p-5">
-                <div>
-                  <p className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground">Phone number</p>
-                  <div className="mt-1 flex items-center gap-2">
-                    <p className="font-display text-lg font-bold">{order.phone_number}</p>
-                    <button
-                      onClick={() => {
-                        void navigator.clipboard?.writeText(order.phone_number ?? "");
-                        toast.success("Number copied");
-                      }}
-                      className="text-muted-foreground hover:text-foreground"
-                      aria-label="Copy number"
-                    >
-                      <Copy className="h-4 w-4" />
-                    </button>
-                  </div>
-                  <p className="mt-1 text-xs text-muted-foreground">{order.order_reference} · {order.service} · {order.country}</p>
-                </div>
-
-                <div className="flex items-center gap-2 rounded-xl bg-secondary/70 px-4 py-3">
-                  <Timer className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm font-semibold tabular-nums">{timeLeft}</span>
-                  <span className="text-xs text-muted-foreground">until expiry</span>
-                </div>
-
-                <div className="rounded-xl border border-border p-4">
-                  <p className="flex items-center gap-2 text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
-                    <MessageSquareText className="h-3.5 w-3.5" /> SMS status
-                  </p>
-                  {order.verification_code ? (
-                    <p className="mt-2 font-display text-2xl font-bold tracking-[0.3em] text-accent">{order.verification_code}</p>
-                  ) : (
-                    <p className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-                      <Loader2 className="h-3.5 w-3.5 animate-spin" /> Waiting for incoming SMS…
-                    </p>
-                  )}
-                </div>
-
-                <Button asChild variant="secondary" size="sm" className="w-full">
-                  <Link to="/dashboard/verify">Enter SMS code</Link>
-                </Button>
-
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full text-destructive hover:text-destructive"
-                  disabled={cancel.isPending}
-                  onClick={() =>
-                    cancel.mutate(order.id, {
-                      onSuccess: () => toast.success("Order cancelled", { description: "Your wallet has been refunded." }),
-                      onError: (e) => toast.error(e instanceof Error ? e.message : "Could not cancel order"),
-                    })
-                  }
-                >
-                  <X className="mr-1.5 h-3.5 w-3.5" /> Cancel & refund
-                </Button>
-              </div>
-            </div>
+            <SmsSessionPanel
+              phoneNumber={order.phone_number ?? "—"}
+              country={order.country}
+              countryCode={order.country_code}
+              service={order.service}
+              serviceCode={order.service_code}
+              orderReference={order.order_reference}
+              expiresAt={order.expires_at}
+              demo
+              state={order.status === "sms_received" ? "received" : "waiting"}
+              messages={
+                order.verification_code
+                  ? [{
+                      id: order.id,
+                      sender: order.service,
+                      body: `Your ${order.service} verification code is ${order.verification_code}.`,
+                      receivedAt: order.updated_at ?? order.created_at,
+                    }]
+                  : []
+              }
+              endingSession={cancel.isPending}
+              onEndSession={() =>
+                cancel.mutate(order.id, {
+                  onSuccess: () => toast.success("Session ended", { description: "Your wallet has been refunded." }),
+                  onError: (e) => toast.error(e instanceof Error ? e.message : "Could not end session"),
+                })
+              }
+            />
           )}
         </div>
       </div>

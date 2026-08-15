@@ -22,6 +22,7 @@ import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminCountriesRouteImport } from './routes/admin.countries'
 import { Route as AdminNumbersRouteImport } from './routes/admin.numbers'
@@ -44,7 +45,6 @@ import { Route as DashboardProfileRouteImport } from './routes/dashboard.profile
 import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
 import { Route as DashboardSupportRouteImport } from './routes/dashboard.support'
 import { Route as DashboardTransactionsRouteImport } from './routes/dashboard.transactions'
-import { Route as DashboardVerifyRouteImport } from './routes/dashboard.verify'
 import { Route as DashboardWalletRouteImport } from './routes/dashboard.wallet'
 
 const IndexRoute = IndexRouteImport.update({
@@ -110,6 +110,11 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyEmailRoute = VerifyEmailRouteImport.update({
+  id: '/verify-email',
+  path: '/verify-email',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -222,11 +227,6 @@ const DashboardTransactionsRoute = DashboardTransactionsRouteImport.update({
   path: '/transactions',
   getParentRoute: () => DashboardRoute,
 } as any)
-const DashboardVerifyRoute = DashboardVerifyRouteImport.update({
-  id: '/verify',
-  path: '/verify',
-  getParentRoute: () => DashboardRoute,
-} as any)
 const DashboardWalletRoute = DashboardWalletRouteImport.update({
   id: '/wallet',
   path: '/wallet',
@@ -247,6 +247,7 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
+  '/verify-email': typeof VerifyEmailRoute
   '/admin/countries': typeof AdminCountriesRoute
   '/admin/numbers': typeof AdminNumbersRoute
   '/admin/orders': typeof AdminOrdersRoute
@@ -267,7 +268,6 @@ export interface FileRoutesByFullPath {
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/support': typeof DashboardSupportRoute
   '/dashboard/transactions': typeof DashboardTransactionsRoute
-  '/dashboard/verify': typeof DashboardVerifyRoute
   '/dashboard/wallet': typeof DashboardWalletRoute
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
@@ -284,6 +284,7 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
+  '/verify-email': typeof VerifyEmailRoute
   '/admin/countries': typeof AdminCountriesRoute
   '/admin/numbers': typeof AdminNumbersRoute
   '/admin/orders': typeof AdminOrdersRoute
@@ -304,7 +305,6 @@ export interface FileRoutesByTo {
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/support': typeof DashboardSupportRoute
   '/dashboard/transactions': typeof DashboardTransactionsRoute
-  '/dashboard/verify': typeof DashboardVerifyRoute
   '/dashboard/wallet': typeof DashboardWalletRoute
   '/admin': typeof AdminIndexRoute
   '/dashboard': typeof DashboardIndexRoute
@@ -324,6 +324,7 @@ export interface FileRoutesById {
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
+  '/verify-email': typeof VerifyEmailRoute
   '/admin/countries': typeof AdminCountriesRoute
   '/admin/numbers': typeof AdminNumbersRoute
   '/admin/orders': typeof AdminOrdersRoute
@@ -344,7 +345,6 @@ export interface FileRoutesById {
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/support': typeof DashboardSupportRoute
   '/dashboard/transactions': typeof DashboardTransactionsRoute
-  '/dashboard/verify': typeof DashboardVerifyRoute
   '/dashboard/wallet': typeof DashboardWalletRoute
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
@@ -365,6 +365,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/services'
+    | '/verify-email'
     | '/admin/countries'
     | '/admin/numbers'
     | '/admin/orders'
@@ -385,7 +386,6 @@ export interface FileRouteTypes {
     | '/dashboard/settings'
     | '/dashboard/support'
     | '/dashboard/transactions'
-    | '/dashboard/verify'
     | '/dashboard/wallet'
     | '/admin/'
     | '/dashboard/'
@@ -402,6 +402,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/services'
+    | '/verify-email'
     | '/admin/countries'
     | '/admin/numbers'
     | '/admin/orders'
@@ -422,7 +423,6 @@ export interface FileRouteTypes {
     | '/dashboard/settings'
     | '/dashboard/support'
     | '/dashboard/transactions'
-    | '/dashboard/verify'
     | '/dashboard/wallet'
     | '/admin'
     | '/dashboard'
@@ -441,6 +441,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/services'
+    | '/verify-email'
     | '/admin/countries'
     | '/admin/numbers'
     | '/admin/orders'
@@ -461,7 +462,6 @@ export interface FileRouteTypes {
     | '/dashboard/settings'
     | '/dashboard/support'
     | '/dashboard/transactions'
-    | '/dashboard/verify'
     | '/dashboard/wallet'
     | '/admin/'
     | '/dashboard/'
@@ -481,6 +481,7 @@ export interface RootRouteChildren {
   RegisterRoute: typeof RegisterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   ServicesRoute: typeof ServicesRoute
+  VerifyEmailRoute: typeof VerifyEmailRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -574,6 +575,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify-email': {
+      id: '/verify-email'
+      path: '/verify-email'
+      fullPath: '/verify-email'
+      preLoaderRoute: typeof VerifyEmailRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -730,13 +738,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardTransactionsRouteImport
       parentRoute: typeof DashboardRoute
     }
-    '/dashboard/verify': {
-      id: '/dashboard/verify'
-      path: '/verify'
-      fullPath: '/dashboard/verify'
-      preLoaderRoute: typeof DashboardVerifyRouteImport
-      parentRoute: typeof DashboardRoute
-    }
     '/dashboard/wallet': {
       id: '/dashboard/wallet'
       path: '/wallet'
@@ -790,7 +791,6 @@ interface DashboardRouteChildren {
   DashboardSettingsRoute: typeof DashboardSettingsRoute
   DashboardSupportRoute: typeof DashboardSupportRoute
   DashboardTransactionsRoute: typeof DashboardTransactionsRoute
-  DashboardVerifyRoute: typeof DashboardVerifyRoute
   DashboardWalletRoute: typeof DashboardWalletRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
 }
@@ -804,7 +804,6 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardSettingsRoute: DashboardSettingsRoute,
   DashboardSupportRoute: DashboardSupportRoute,
   DashboardTransactionsRoute: DashboardTransactionsRoute,
-  DashboardVerifyRoute: DashboardVerifyRoute,
   DashboardWalletRoute: DashboardWalletRoute,
   DashboardIndexRoute: DashboardIndexRoute,
 }
@@ -827,6 +826,7 @@ const rootRouteChildren: RootRouteChildren = {
   RegisterRoute: RegisterRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   ServicesRoute: ServicesRoute,
+  VerifyEmailRoute: VerifyEmailRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

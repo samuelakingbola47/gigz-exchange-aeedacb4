@@ -316,3 +316,27 @@
     animation: none !important;
   }
 }
+
+/* ---- SMS session (waiting for incoming SMS) ---- */
+@keyframes gx-radar-ping {
+  0% { transform: scale(0.5); opacity: 0.5; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+@keyframes gx-radar-sweep {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes gx-sms-in {
+  0% { transform: translateY(10px) scale(0.97); opacity: 0; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+@utility animate-radar-ping { animation: gx-radar-ping 2.4s ease-out infinite; }
+@utility animate-radar-sweep { animation: gx-radar-sweep 3.6s linear infinite; }
+@utility animate-sms-in { animation: gx-sms-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-radar-ping, .animate-radar-sweep, .animate-sms-in { animation: none !important; }
+}
