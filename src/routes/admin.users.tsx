@@ -12,7 +12,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useAdminProfiles } from "@/lib/queries";
+import { useAdminOrders, useAdminProfiles, useAdminWallets } from "@/lib/queries";
 import { formatDate } from "@/lib/format";
 import { ngn } from "@/lib/currency";
 
@@ -35,6 +35,10 @@ function AdminUsers() {
   const rows = users.filter(
     (u) => u.full_name.toLowerCase().includes(term) || u.email.toLowerCase().includes(term) || u.id.toLowerCase().includes(term),
   );
+  const { data: wallets = [] } = useAdminWallets();
+  const { data: orders = [] } = useAdminOrders();
+  const walletFor = (id: string) => Number(wallets.find((w) => w.user_id === id)?.balance ?? 0);
+  const orderCount = (id: string) => orders.filter((o) => o.user_id === id).length;
   const active = rows.filter((u) => u.status === "active").length;
   const suspended = rows.filter((u) => u.status === "suspended").length;
 
@@ -60,7 +64,7 @@ function AdminUsers() {
           <p className="text-xs text-muted-foreground">{rows.length} shown</p>
         </div>
         {rows.length === 0 ? (
-          <EmptyState icon={SearchX} title="No users found" description="Try a different search term." />
+          <EmptyState icon={SearchX} title={users.length === 0 ? "No users yet" : "No users found"} description={users.length === 0 ? "No accounts have been registered yet." : "Try a different search term."} />
         ) : (
           <div className="overflow-x-auto">
             <Table>

@@ -232,6 +232,17 @@ export function useAdminProfiles() {
   });
 }
 
+export function useAdminWallets() {
+  return useQuery({
+    queryKey: ["admin-wallets"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("wallets").select("*").limit(500);
+      if (error) throw error;
+      return data as WalletRow[];
+    },
+  });
+}
+
 export function useAdminTransactions() {
   return useQuery({
     queryKey: ["admin-transactions"],
