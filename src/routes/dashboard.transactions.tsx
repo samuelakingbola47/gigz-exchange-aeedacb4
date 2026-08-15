@@ -70,6 +70,12 @@ function TransactionsPage() {
         </Select>
       </div>
 
+      {rows.length === 0 ? (
+        <p className="surface-card mt-4 px-5 py-10 text-center text-sm text-muted-foreground">
+          No transactions yet — purchases, refunds and deposits will be listed here.
+        </p>
+      ) : null}
+
       <div className="surface-card mt-4 hidden overflow-hidden md:block">
         <Table>
           <TableHeader>
@@ -93,7 +99,7 @@ function TransactionsPage() {
                 <TableCell className={Number(t.amount) >= 0 ? "text-right font-semibold text-success" : "text-right font-semibold"}>
                   {Number(t.amount) >= 0 ? "+" : "−"}{ngn(Math.abs(Number(t.amount)))}
                 </TableCell>
-                <TableCell className="text-right tabular-nums">{ngn(t.balance)}</TableCell>
+                <TableCell className="text-right tabular-nums">{ngn(Number(t.balance_after))}</TableCell>
                 <TableCell><StatusBadge status={t.status} /></TableCell>
               </TableRow>
             ))}
@@ -106,7 +112,7 @@ function TransactionsPage() {
           <div key={t.id} className="surface-card p-4">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm font-semibold">{t.type}</p>
+                <p className="text-sm font-semibold capitalize">{t.type}</p>
                 <p className="text-xs text-muted-foreground">{t.description}</p>
               </div>
               <span className={Number(t.amount) >= 0 ? "text-sm font-semibold text-success" : "text-sm font-semibold"}>
@@ -114,7 +120,7 @@ function TransactionsPage() {
               </span>
             </div>
             <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
-              <span>{t.date} · {t.id}</span>
+              <span>{formatDateTime(t.created_at)} · {t.reference}</span>
               <StatusBadge status={t.status} />
             </div>
           </div>
