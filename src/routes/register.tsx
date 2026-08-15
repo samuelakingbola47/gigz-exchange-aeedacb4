@@ -93,15 +93,15 @@ function RegisterPage() {
           setCheckEmail(true);
         }}
       >
-        <Field label="Full name" error={touched ? errors.name : ""}>
-          <Input value={form.name} onChange={set("name")} placeholder="Ada Okafor" />
+        <Field htmlFor="reg-name" label="Full name" error={touched ? errors.name : ""}>
+          <Input id="reg-name" value={form.name} onChange={set("name")} placeholder="Ada Okafor" />
         </Field>
-        <Field label="Email address" error={touched ? errors.email : ""}>
-          <Input type="email" value={form.email} onChange={set("email")} placeholder="you@company.com" />
+        <Field htmlFor="reg-email" label="Email address" error={touched ? errors.email : ""}>
+          <Input id="reg-email" type="email" value={form.email} onChange={set("email")} placeholder="you@company.com" />
         </Field>
-        <Field label="Password" error={touched ? errors.password : ""}>
+        <Field htmlFor="reg-password" label="Password" error={touched ? errors.password : ""}>
           <div className="relative">
-            <Input type={show ? "text" : "password"} value={form.password} onChange={set("password")} className="pr-11" />
+            <Input id="reg-password" type={show ? "text" : "password"} value={form.password} onChange={set("password")} className="pr-11" />
             <button
               type="button"
               onClick={() => setShow((v) => !v)}
@@ -123,9 +123,9 @@ function RegisterPage() {
             ))}
           </div>
         </Field>
-        <Field label="Confirm password" error={touched ? errors.confirm : ""}>
+        <Field htmlFor="reg-confirm" label="Confirm password" error={touched ? errors.confirm : ""}>
           <div className="relative">
-            <Input type={show ? "text" : "password"} value={form.confirm} onChange={set("confirm")} className="pr-11" />
+            <Input id="reg-confirm" type={show ? "text" : "password"} value={form.confirm} onChange={set("confirm")} className="pr-11" />
             {form.confirm && form.confirm === form.password ? (
               <Check className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-success" />
             ) : null}
@@ -152,10 +152,10 @@ function RegisterPage() {
   );
 }
 
-function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
+function Field({ label, error, children, htmlFor }: { label: string; error?: string; children: React.ReactNode; htmlFor?: string }) {
   return (
     <div className="space-y-2">
-      <Label>{label}</Label>
+      <Label htmlFor={htmlFor}>{label}</Label>
       {children}
       {error ? <p className="text-xs font-medium text-destructive">{error}</p> : null}
     </div>
