@@ -54,7 +54,7 @@ function ProfilePage() {
           <h2 className="mt-4 text-lg font-semibold">{profile?.full_name?.trim() || "Your account"}</h2>
           <p className="truncate text-sm text-muted-foreground">{profile?.email ?? "—"}</p>
           <div className="mt-3 flex justify-center">
-            <StatusBadge status={profile?.status === "active" ? "Active" : (profile?.status ?? "Active")} label={profile?.status === "active" ? "Active account" : profile?.status} />
+            <StatusBadge status={profile?.status === "active" ? "Active" : (profile?.status ?? "Active")} label={profile?.status === "active" ? "Active account" : (profile?.status ?? "Active")} />
           </div>
           <dl className="mt-6 space-y-3 border-t border-border pt-5 text-left text-sm">
             <div className="flex justify-between gap-3"><dt className="text-muted-foreground">Wallet balance</dt><dd className="font-medium">{ngn(Number(wallet?.balance ?? 0))}</dd></div>
