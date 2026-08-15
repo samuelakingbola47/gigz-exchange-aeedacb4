@@ -40,12 +40,12 @@ function AdminServices() {
           <TableBody>
             {services.map((s) => (
               <TableRow key={s.id}>
-                <TableCell><ServiceIcon service={s.id} size="sm" plain className="mr-2 inline-block align-[-3px]" />{s.name}</TableCell>
+                <TableCell><ServiceIcon service={s.code} size="sm" plain className="mr-2 inline-block align-[-3px]" />{s.name}</TableCell>
                 <TableCell className="text-muted-foreground">{s.category}</TableCell>
-                <TableCell className="text-right tabular-nums">{s.numbers.toLocaleString()}</TableCell>
-                <TableCell><Input defaultValue={s.price.toFixed(2)} className="h-8 w-24" /></TableCell>
+                <TableCell className="text-right tabular-nums">{s.numbers_available.toLocaleString()}</TableCell>
+                <TableCell><Input defaultValue={Number(s.base_price).toFixed(2)} className="h-8 w-24" /></TableCell>
                 <TableCell><StatusBadge status={s.availability === "low" ? "Pending" : "Active"} label={s.availability} /></TableCell>
-                <TableCell className="text-right"><Switch defaultChecked onCheckedChange={() => toast(`${s.name} updated (demo)`)} /></TableCell>
+                <TableCell className="text-right"><Switch defaultChecked={s.status === "active"} onCheckedChange={() => toast(`${s.name} updated (demo)`)} /></TableCell>
               </TableRow>
             ))}
           </TableBody>
