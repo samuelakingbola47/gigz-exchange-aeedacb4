@@ -6,7 +6,7 @@ import { PageHero } from "@/components/site/PageHero";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { EmptyState } from "@/components/app/EmptyState";
-import { services } from "@/lib/mock-data";
+import { useServices } from "@/lib/queries";
 import { cn } from "@/lib/utils";
 import { ngn } from "@/lib/currency";
 import { ServiceIcon } from "@/components/brand/ServiceIcon";
@@ -34,6 +34,7 @@ const availabilityTone: Record<string, string> = {
 function ServicesPage() {
   const [query, setQuery] = useState("");
   const [cat, setCat] = useState<(typeof categories)[number]>("All");
+  const { data: services = [] } = useServices();
 
   const list = useMemo(
     () =>
@@ -42,7 +43,7 @@ function ServicesPage() {
           (cat === "All" || s.category === cat) &&
           s.name.toLowerCase().includes(query.trim().toLowerCase()),
       ),
-    [query, cat],
+    [services, query, cat],
   );
 
   return (
@@ -50,7 +51,7 @@ function ServicesPage() {
       <PageHero
         eyebrow="Service marketplace"
         title="Choose a service, get a number"
-        description="Placeholder catalogue for the Phase 1 prototype. Prices and availability shown are demo data."
+        description="Live catalogue from the Gigz Exchange platform. Prices are shown in Naira."
       />
       <section className="mx-auto max-w-7xl px-5 py-12">
         <div className="surface-card flex flex-col gap-4 p-4 sm:flex-row sm:items-center">
@@ -94,17 +95,17 @@ function ServicesPage() {
             {list.map((s) => (
               <div key={s.id} className="surface-card group flex flex-col p-5 transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]">
                 <div className="flex items-start justify-between">
-                  <ServiceIcon service={s.id} size="lg" />
+                  <ServiceIcon service={s.code} size="lg" />
                   <span className={cn("rounded-full px-2.5 py-1 text-[11px] font-semibold capitalize", availabilityTone[s.availability])}>
                     {s.availability} availability
                   </span>
                 </div>
                 <h3 className="mt-4 text-lg font-semibold">{s.name}</h3>
-                <p className="text-xs text-muted-foreground">{s.category} · {s.numbers.toLocaleString()} numbers</p>
+                <p className="text-xs text-muted-foreground">{s.category} · {s.numbers_available.toLocaleString()} numbers</p>
                 <div className="mt-5 flex items-end justify-between border-t border-border pt-4">
                   <div>
                     <p className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground">Starting at</p>
-                    <p className="font-display text-xl font-bold">{ngn(s.price)}</p>
+                    <p className="font-display text-xl font-bold">{ngn(Number(s.base_price))}</p>
                   </div>
                   <Button asChild size="sm"><Link to="/dashboard/buy">Get Number</Link></Button>
                 </div>

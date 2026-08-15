@@ -7,7 +7,7 @@ import { StatusBadge } from "@/components/app/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { countries } from "@/lib/mock-data";
+import { useCountries } from "@/lib/queries";
 import { CountryFlag } from "@/components/brand/CountryFlag";
 
 export const Route = createFileRoute("/admin/numbers")({
@@ -23,6 +23,7 @@ export const Route = createFileRoute("/admin/numbers")({
 });
 
 function AdminNumbers() {
+  const { data: countries = [] } = useCountries();
   return (
     <AdminShell
       title="Number inventory"
@@ -55,9 +56,9 @@ function AdminNumbers() {
                 const util = 28 + ((i * 13) % 60);
                 return (
                   <TableRow key={c.id}>
-                    <TableCell><CountryFlag country={c.id} name={c.name} size="sm" className="mr-2 inline-block align-[-3px]" />{c.name}</TableCell>
-                    <TableCell className="font-mono text-xs">{c.dial}</TableCell>
-                    <TableCell className="text-right tabular-nums">{c.numbers.toLocaleString()}</TableCell>
+                    <TableCell><CountryFlag country={c.country_code} name={c.name} size="sm" className="mr-2 inline-block align-[-3px]" />{c.name}</TableCell>
+                    <TableCell className="font-mono text-xs">{c.dial_code}</TableCell>
+                    <TableCell className="text-right tabular-nums">{c.numbers_available.toLocaleString()}</TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <Progress value={util} className="h-1.5" />

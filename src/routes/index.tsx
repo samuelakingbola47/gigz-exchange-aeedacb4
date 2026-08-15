@@ -20,7 +20,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { services, countries } from "@/lib/mock-data";
+import { useCountries, useServices } from "@/lib/queries";
 import { ngn } from "@/lib/currency";
 import { ServiceIcon } from "@/components/brand/ServiceIcon";
 import { CountryFlag } from "@/components/brand/CountryFlag";
@@ -76,6 +76,9 @@ const faqs = [
 ];
 
 function Home() {
+  const { data: services = [] } = useServices();
+  const { data: countries = [] } = useCountries();
+
   return (
     <PublicLayout>
       {/* Hero */}
@@ -156,7 +159,7 @@ function Home() {
       <Section
         eyebrow="Available services"
         title="Verify on the platforms that matter"
-        description="Placeholder service list for the prototype — live catalogue arrives in Phase 2."
+        description="Live catalogue of the platforms our numbers support."
         action={<Link to="/services" className="text-sm font-semibold text-foreground hover:text-accent">All services →</Link>}
         muted
       >
@@ -164,13 +167,13 @@ function Home() {
           {services.slice(0, 9).map((s) => (
             <div key={s.id} className="flex items-center justify-between rounded-2xl border border-border bg-card px-4 py-3.5 transition-colors hover:border-accent/50">
               <div className="flex items-center gap-3">
-                <ServiceIcon service={s.id} size="sm" />
+                <ServiceIcon service={s.code} size="sm" />
                 <div>
                   <p className="text-sm font-semibold">{s.name}</p>
                   <p className="text-xs text-muted-foreground">{s.category}</p>
                 </div>
               </div>
-              <p className="text-sm font-semibold">{ngn(s.price)}</p>
+              <p className="text-sm font-semibold">{ngn(Number(s.base_price))}</p>
             </div>
           ))}
         </div>
@@ -187,14 +190,14 @@ function Home() {
           {countries.slice(0, 8).map((c) => (
             <div key={c.id} className="surface-card px-4 py-4 transition-shadow hover:shadow-[var(--shadow-lift)]">
               <div className="flex items-center gap-3">
-                <CountryFlag country={c.id} name={c.name} size="lg" />
+                <CountryFlag country={c.country_code} name={c.name} size="lg" />
                 <div>
                   <p className="text-sm font-semibold">{c.name}</p>
-                  <p className="text-xs text-muted-foreground">{c.numbers.toLocaleString()} numbers</p>
+                  <p className="text-xs text-muted-foreground">{c.numbers_available.toLocaleString()} numbers</p>
                 </div>
               </div>
               <p className="mt-3 text-xs text-muted-foreground">
-                from <span className="font-semibold text-foreground">{ngn(c.price)}</span>
+                from <span className="font-semibold text-foreground">{ngn(Number(c.base_price))}</span>
               </p>
             </div>
           ))}

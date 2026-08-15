@@ -7,7 +7,8 @@ import { AdminShell } from "@/components/app/CustomerShell";
 import { StatCard } from "@/components/app/StatCard";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { countries, revenueSeries, services, userGrowth } from "@/lib/mock-data";
+import { revenueSeries, userGrowth } from "@/lib/mock-data";
+import { useCountries, useServices } from "@/lib/queries";
 import { ngn } from "@/lib/currency";
 import { ServiceIcon } from "@/components/brand/ServiceIcon";
 import { CountryFlag } from "@/components/brand/CountryFlag";
@@ -27,6 +28,8 @@ export const Route = createFileRoute("/admin/reports")({
 const axis = { stroke: "var(--color-muted-foreground)", fontSize: 11 } as const;
 
 function AdminReports() {
+  const { data: services = [] } = useServices();
+  const { data: countries = [] } = useCountries();
   return (
     <AdminShell
       title="Reports"
@@ -80,9 +83,9 @@ function AdminReports() {
             <TableBody>
               {services.slice(0, 6).map((s, i) => (
                 <TableRow key={s.id}>
-                  <TableCell><ServiceIcon service={s.id} size="sm" plain className="mr-2 inline-block align-[-3px]" />{s.name}</TableCell>
+                  <TableCell><ServiceIcon service={s.code} size="sm" plain className="mr-2 inline-block align-[-3px]" />{s.name}</TableCell>
                   <TableCell className="text-right tabular-nums">{(9800 - i * 1100).toLocaleString()}</TableCell>
-                  <TableCell className="text-right tabular-nums">{ngn(((9800 - i * 1100) * s.price))}</TableCell>
+                  <TableCell className="text-right tabular-nums">{ngn(((9800 - i * 1100) * Number(s.base_price)))}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -95,9 +98,9 @@ function AdminReports() {
             <TableBody>
               {countries.slice(0, 6).map((c, i) => (
                 <TableRow key={c.id}>
-                  <TableCell><CountryFlag country={c.id} name={c.name} size="sm" className="mr-2 inline-block align-[-3px]" />{c.name}</TableCell>
+                  <TableCell><CountryFlag country={c.country_code} name={c.name} size="sm" className="mr-2 inline-block align-[-3px]" />{c.name}</TableCell>
                   <TableCell className="text-right tabular-nums">{(8600 - i * 950).toLocaleString()}</TableCell>
-                  <TableCell className="text-right tabular-nums">{ngn(((8600 - i * 950) * c.price))}</TableCell>
+                  <TableCell className="text-right tabular-nums">{ngn(((8600 - i * 950) * Number(c.base_price)))}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

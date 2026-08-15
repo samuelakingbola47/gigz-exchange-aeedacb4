@@ -12,7 +12,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { adminUsers } from "@/lib/mock-data";
+import { useAdminOrders, useAdminProfiles, useAdminWallets } from "@/lib/queries";
+import { formatDate } from "@/lib/format";
 import { ngn } from "@/lib/currency";
 
 export const Route = createFileRoute("/admin/users")({
@@ -29,21 +30,29 @@ export const Route = createFileRoute("/admin/users")({
 
 function AdminUsers() {
   const [q, setQ] = useState("");
-  const rows = adminUsers.filter(
-    (u) => u.name.toLowerCase().includes(q.toLowerCase()) || u.email.toLowerCase().includes(q.toLowerCase()) || u.id.toLowerCase().includes(q.toLowerCase()),
+  const { data: users = [] } = useAdminProfiles();
+  const term = q.toLowerCase();
+  const rows = users.filter(
+    (u) => u.full_name.toLowerCase().includes(term) || u.email.toLowerCase().includes(term) || u.id.toLowerCase().includes(term),
   );
+  const { data: wallets = [] } = useAdminWallets();
+  const { data: orders = [] } = useAdminOrders();
+  const walletFor = (id: string) => Number(wallets.find((w) => w.user_id === id)?.balance ?? 0);
+  const orderCount = (id: string) => orders.filter((o) => o.user_id === id).length;
+  const active = rows.filter((u) => u.status === "active").length;
+  const suspended = rows.filter((u) => u.status === "suspended").length;
 
   return (
     <AdminShell
       title="Users"
-      subtitle="10,820 registered accounts."
+      subtitle={`${users.length} registered account${users.length === 1 ? "" : "s"}.`}
       actions={<Button variant="outline" onClick={() => toast("Export queued (demo)")}>Export CSV</Button>}
     >
       <div className="grid gap-4 sm:grid-cols-4">
-        <StatCard label="Total users" value="10,820" icon={Users} />
-        <StatCard label="Active" value="9,904" hint="Good standing" />
-        <StatCard label="Pending" value="742" hint="Unverified email" />
-        <StatCard label="Suspended" value="174" hint="Manual review" />
+        <StatCard label="Total users" value={users.length.toLocaleString()} icon={Users} />
+        <StatCard label="Active" value={active.toLocaleString()} hint="Good standing" />
+        <StatCard label="Pending" value={(users.length - active - suspended).toLocaleString()} hint="Unverified email" />
+        <StatCard label="Suspended" value={suspended.toLocaleString()} hint="Manual review" />
       </div>
 
       <div className="surface-card mt-6 overflow-hidden">
@@ -55,7 +64,7 @@ function AdminUsers() {
           <p className="text-xs text-muted-foreground">{rows.length} shown</p>
         </div>
         {rows.length === 0 ? (
-          <EmptyState icon={SearchX} title="No users found" description="Try a different search term." />
+          <EmptyState icon={SearchX} title={users.length === 0 ? "No users yet" : "No users found"} description={users.length === 0 ? "No accounts have been registered yet." : "Try a different search term."} />
         ) : (
           <div className="overflow-x-auto">
             <Table>
@@ -74,14 +83,14 @@ function AdminUsers() {
                 {rows.map((u) => (
                   <TableRow key={u.id}>
                     <TableCell>
-                      <p className="font-semibold">{u.name}</p>
+                      <p className="font-semibold">{u.full_name || "—"}</p>
                       <p className="text-xs text-muted-foreground">{u.email}</p>
                     </TableCell>
                     <TableCell className="font-mono text-xs">{u.id}</TableCell>
-                    <TableCell><StatusBadge status={u.status} /></TableCell>
-                    <TableCell className="text-right tabular-nums">{ngn(u.balance)}</TableCell>
-                    <TableCell className="text-right tabular-nums">{u.orders}</TableCell>
-                    <TableCell className="text-muted-foreground">{u.joined}</TableCell>
+                    <TableCell><StatusBadge status={u.status === "active" ? "Active" : u.status === "suspended" ? "Suspended" : "Pending"} /></TableCell>
+                    <TableCell className="text-right tabular-nums">{ngn(walletFor(u.id))}</TableCell>
+                    <TableCell className="text-right tabular-nums">{orderCount(u.id)}</TableCell>
+                    <TableCell className="text-muted-foreground">{formatDate(u.created_at)}</TableCell>
                     <TableCell className="text-right">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild><Button variant="ghost" size="sm">Manage</Button></DropdownMenuTrigger>

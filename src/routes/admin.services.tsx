@@ -5,7 +5,7 @@ import { StatusBadge } from "@/components/app/StatusBadge";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { services } from "@/lib/mock-data";
+import { useServices } from "@/lib/queries";
 import { ServiceIcon } from "@/components/brand/ServiceIcon";
 
 export const Route = createFileRoute("/admin/services")({
@@ -21,6 +21,8 @@ export const Route = createFileRoute("/admin/services")({
 });
 
 function AdminServices() {
+  const { data: services = [] } = useServices();
+
   return (
     <AdminShell title="Services" subtitle="Catalogue of supported verification services.">
       <div className="surface-card overflow-x-auto">
@@ -38,12 +40,12 @@ function AdminServices() {
           <TableBody>
             {services.map((s) => (
               <TableRow key={s.id}>
-                <TableCell><ServiceIcon service={s.id} size="sm" plain className="mr-2 inline-block align-[-3px]" />{s.name}</TableCell>
+                <TableCell><ServiceIcon service={s.code} size="sm" plain className="mr-2 inline-block align-[-3px]" />{s.name}</TableCell>
                 <TableCell className="text-muted-foreground">{s.category}</TableCell>
-                <TableCell className="text-right tabular-nums">{s.numbers.toLocaleString()}</TableCell>
-                <TableCell><Input defaultValue={s.price.toFixed(2)} className="h-8 w-24" /></TableCell>
+                <TableCell className="text-right tabular-nums">{s.numbers_available.toLocaleString()}</TableCell>
+                <TableCell><Input defaultValue={Number(s.base_price).toFixed(2)} className="h-8 w-24" /></TableCell>
                 <TableCell><StatusBadge status={s.availability === "low" ? "Pending" : "Active"} label={s.availability} /></TableCell>
-                <TableCell className="text-right"><Switch defaultChecked onCheckedChange={() => toast(`${s.name} updated (demo)`)} /></TableCell>
+                <TableCell className="text-right"><Switch defaultChecked={s.status === "active"} onCheckedChange={() => toast(`${s.name} updated (demo)`)} /></TableCell>
               </TableRow>
             ))}
           </TableBody>

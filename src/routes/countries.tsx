@@ -6,7 +6,7 @@ import { PageHero } from "@/components/site/PageHero";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { EmptyState } from "@/components/app/EmptyState";
-import { countries } from "@/lib/mock-data";
+import { useCountries } from "@/lib/queries";
 import { cn } from "@/lib/utils";
 import { ngn } from "@/lib/currency";
 import { CountryFlag } from "@/components/brand/CountryFlag";
@@ -34,6 +34,7 @@ const tone: Record<string, string> = {
 function CountriesPage() {
   const [query, setQuery] = useState("");
   const [region, setRegion] = useState<(typeof regions)[number]>("All");
+  const { data: countries = [] } = useCountries();
 
   const list = useMemo(
     () =>
@@ -42,7 +43,7 @@ function CountriesPage() {
           (region === "All" || c.region === region) &&
           c.name.toLowerCase().includes(query.trim().toLowerCase()),
       ),
-    [query, region],
+    [countries, query, region],
   );
 
   return (
@@ -50,7 +51,7 @@ function CountriesPage() {
       <PageHero
         eyebrow="Country marketplace"
         title="Local numbers in 50+ countries"
-        description="Demo inventory for the prototype. Real provider inventory connects in Phase 2."
+        description="Live country catalogue. Real provider inventory connects in the next phase."
       />
       <section className="mx-auto max-w-7xl px-5 py-12">
         <div className="surface-card flex flex-col gap-4 p-4 sm:flex-row sm:items-center">
@@ -84,10 +85,10 @@ function CountriesPage() {
               <div key={c.id} className="surface-card p-5 transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <CountryFlag country={c.id} name={c.name} size="xl" className="rounded-lg" />
+                    <CountryFlag country={c.country_code} name={c.name} size="xl" className="rounded-lg" />
                     <div>
                       <h3 className="text-base font-semibold">{c.name}</h3>
-                      <p className="text-xs text-muted-foreground">{c.dial} · {c.region}</p>
+                      <p className="text-xs text-muted-foreground">{c.dial_code} · {c.region}</p>
                     </div>
                   </div>
                   <span className={cn("rounded-full px-2.5 py-1 text-[11px] font-semibold capitalize", tone[c.availability])}>
@@ -97,11 +98,11 @@ function CountriesPage() {
                 <dl className="mt-5 grid grid-cols-2 gap-3 border-t border-border pt-4 text-sm">
                   <div>
                     <dt className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground">Available</dt>
-                    <dd className="mt-0.5 font-semibold">{c.numbers.toLocaleString()}</dd>
+                    <dd className="mt-0.5 font-semibold">{c.numbers_available.toLocaleString()}</dd>
                   </div>
                   <div>
                     <dt className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground">From</dt>
-                    <dd className="mt-0.5 font-semibold">{ngn(c.price)}</dd>
+                    <dd className="mt-0.5 font-semibold">{ngn(Number(c.base_price))}</dd>
                   </div>
                 </dl>
                 <Button asChild size="sm" variant="outline" className="mt-4 w-full">

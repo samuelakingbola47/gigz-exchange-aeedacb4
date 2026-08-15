@@ -5,7 +5,10 @@ import { StatCard } from "@/components/app/StatCard";
 import { StatusBadge } from "@/components/app/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { tickets } from "@/lib/mock-data";
+import { useAdminTickets } from "@/lib/queries";
+import { formatDateTime } from "@/lib/format";
+import { EmptyState } from "@/components/app/EmptyState";
+import { LifeBuoy } from "lucide-react";
 
 export const Route = createFileRoute("/admin/support")({
   head: () => ({
@@ -20,16 +23,23 @@ export const Route = createFileRoute("/admin/support")({
 });
 
 function AdminSupport() {
+  const { data: tickets = [] } = useAdminTickets();
+  const open = tickets.filter((t) => t.status === "Open").length;
+  const resolved = tickets.filter((t) => t.status === "Resolved").length;
+
   return (
     <AdminShell title="Support queue" subtitle="Tickets awaiting a response from the team.">
       <div className="grid gap-4 sm:grid-cols-4">
-        <StatCard label="Open tickets" value="34" hint="Across all customers" />
-        <StatCard label="Awaiting reply" value="12" hint="Customer responded" />
-        <StatCard label="Avg. first response" value="3h 42m" trend="-18%" />
-        <StatCard label="Resolved (7d)" value="196" hint="Closed tickets" />
+        <StatCard label="Open tickets" value={open.toLocaleString()} hint="Across all customers" />
+        <StatCard label="Total tickets" value={tickets.length.toLocaleString()} hint="All time" />
+        <StatCard label="Pending" value={(tickets.length - open - resolved).toLocaleString()} hint="In progress" />
+        <StatCard label="Resolved" value={resolved.toLocaleString()} hint="Closed tickets" />
       </div>
 
       <div className="surface-card mt-6 overflow-x-auto">
+        {tickets.length === 0 ? (
+          <EmptyState icon={LifeBuoy} title="No tickets yet" description="Customer support requests will appear here." />
+        ) : (
         <Table>
           <TableHeader>
             <TableRow>
@@ -45,19 +55,20 @@ function AdminSupport() {
           <TableBody>
             {tickets.map((t) => (
               <TableRow key={t.id}>
-                <TableCell className="font-mono text-xs">{t.id}</TableCell>
+                <TableCell className="font-mono text-xs">{t.ticket_reference}</TableCell>
                 <TableCell className="font-medium">{t.subject}</TableCell>
                 <TableCell className="text-muted-foreground">{t.category}</TableCell>
                 <TableCell>{t.priority}</TableCell>
                 <TableCell><StatusBadge status={t.status} /></TableCell>
-                <TableCell className="text-muted-foreground">{t.updated}</TableCell>
+                <TableCell className="text-muted-foreground">{formatDateTime(t.updated_at)}</TableCell>
                 <TableCell className="text-right">
-                  <Button variant="ghost" size="sm" onClick={() => toast(`Opened ${t.id} (demo)`)}>Open</Button>
+                  <Button variant="ghost" size="sm" onClick={() => toast(`Opened ${t.ticket_reference}`)}>Open</Button>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
+        )}
       </div>
     </AdminShell>
   );
