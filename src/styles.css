@@ -261,3 +261,58 @@
     animation: none !important;
   }
 }
+
+/* ---- OTP verification experience ---- */
+@keyframes gx-otp-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(7px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(3px); }
+}
+
+@keyframes gx-orbit-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes gx-ring-expand {
+  0% { transform: scale(0.6); opacity: 0.55; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+
+@keyframes gx-pop-in {
+  0% { transform: scale(0.4); opacity: 0; }
+  60% { transform: scale(1.12); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes gx-core-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(1.14); opacity: 1; }
+}
+
+@keyframes gx-spark {
+  0% { transform: translate(-50%, -50%) rotate(var(--gx-a)) translateX(28px) scale(0.4); opacity: 0; }
+  40% { opacity: 1; }
+  100% { transform: translate(-50%, -50%) rotate(var(--gx-a)) translateX(120px) scale(1); opacity: 0; }
+}
+
+@keyframes gx-dash {
+  to { stroke-dashoffset: -260; }
+}
+
+@utility animate-otp-shake { animation: gx-otp-shake 0.5s ease-in-out both; }
+@utility animate-orbit-spin { animation: gx-orbit-spin 14s linear infinite; }
+@utility animate-ring-expand { animation: gx-ring-expand 1.6s ease-out infinite; }
+@utility animate-pop-in { animation: gx-pop-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@utility animate-core-pulse { animation: gx-core-pulse 2.4s ease-in-out infinite; }
+@utility animate-spark { animation: gx-spark 1.4s ease-out infinite; }
+@utility animate-dash { animation: gx-dash 1.4s linear infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-otp-shake, .animate-orbit-spin, .animate-ring-expand,
+  .animate-pop-in, .animate-core-pulse, .animate-spark, .animate-dash {
+    animation: none !important;
+  }
+}
