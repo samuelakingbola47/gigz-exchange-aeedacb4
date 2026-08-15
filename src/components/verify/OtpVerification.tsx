@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Check, Loader2, RotateCcw, ShieldAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,7 +20,7 @@ export type OtpVerificationProps = {
   /** Seconds before the code can be resent. */
   resendSeconds?: number;
   title?: string;
-  description?: string;
+  description?: ReactNode;
   /** Real verification hook-up point. Resolve true/false. */
   onVerify?: (code: string) => Promise<boolean> | boolean;
   /** Real resend hook-up point. */

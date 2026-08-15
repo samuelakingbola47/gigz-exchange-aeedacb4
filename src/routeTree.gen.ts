@@ -22,6 +22,7 @@ import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminCountriesRouteImport } from './routes/admin.countries'
 import { Route as AdminNumbersRouteImport } from './routes/admin.numbers'
@@ -109,6 +110,11 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyEmailRoute = VerifyEmailRouteImport.update({
+  id: '/verify-email',
+  path: '/verify-email',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -241,6 +247,7 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
+  '/verify-email': typeof VerifyEmailRoute
   '/admin/countries': typeof AdminCountriesRoute
   '/admin/numbers': typeof AdminNumbersRoute
   '/admin/orders': typeof AdminOrdersRoute
@@ -277,6 +284,7 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
+  '/verify-email': typeof VerifyEmailRoute
   '/admin/countries': typeof AdminCountriesRoute
   '/admin/numbers': typeof AdminNumbersRoute
   '/admin/orders': typeof AdminOrdersRoute
@@ -316,6 +324,7 @@ export interface FileRoutesById {
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
+  '/verify-email': typeof VerifyEmailRoute
   '/admin/countries': typeof AdminCountriesRoute
   '/admin/numbers': typeof AdminNumbersRoute
   '/admin/orders': typeof AdminOrdersRoute
@@ -356,6 +365,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/services'
+    | '/verify-email'
     | '/admin/countries'
     | '/admin/numbers'
     | '/admin/orders'
@@ -392,6 +402,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/services'
+    | '/verify-email'
     | '/admin/countries'
     | '/admin/numbers'
     | '/admin/orders'
@@ -430,6 +441,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/services'
+    | '/verify-email'
     | '/admin/countries'
     | '/admin/numbers'
     | '/admin/orders'
@@ -469,6 +481,7 @@ export interface RootRouteChildren {
   RegisterRoute: typeof RegisterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   ServicesRoute: typeof ServicesRoute
+  VerifyEmailRoute: typeof VerifyEmailRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -562,6 +575,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify-email': {
+      id: '/verify-email'
+      path: '/verify-email'
+      fullPath: '/verify-email'
+      preLoaderRoute: typeof VerifyEmailRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -806,6 +826,7 @@ const rootRouteChildren: RootRouteChildren = {
   RegisterRoute: RegisterRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   ServicesRoute: ServicesRoute,
+  VerifyEmailRoute: VerifyEmailRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
