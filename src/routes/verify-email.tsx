@@ -5,7 +5,7 @@ import { AuthLayout } from "@/components/site/AuthLayout";
 import { OtpVerification } from "@/components/verify/OtpVerification";
 import { supabase } from "@/integrations/supabase/client";
 
-type Search = { email?: string };
+type Search = { email?: string | undefined };
 
 export const Route = createFileRoute("/verify-email")({
   validateSearch: (search: Record<string, unknown>): Search => ({
