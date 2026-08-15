@@ -44,7 +44,6 @@ import { Route as DashboardProfileRouteImport } from './routes/dashboard.profile
 import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
 import { Route as DashboardSupportRouteImport } from './routes/dashboard.support'
 import { Route as DashboardTransactionsRouteImport } from './routes/dashboard.transactions'
-import { Route as DashboardVerifyRouteImport } from './routes/dashboard.verify'
 import { Route as DashboardWalletRouteImport } from './routes/dashboard.wallet'
 
 const IndexRoute = IndexRouteImport.update({
@@ -222,11 +221,6 @@ const DashboardTransactionsRoute = DashboardTransactionsRouteImport.update({
   path: '/transactions',
   getParentRoute: () => DashboardRoute,
 } as any)
-const DashboardVerifyRoute = DashboardVerifyRouteImport.update({
-  id: '/verify',
-  path: '/verify',
-  getParentRoute: () => DashboardRoute,
-} as any)
 const DashboardWalletRoute = DashboardWalletRouteImport.update({
   id: '/wallet',
   path: '/wallet',
@@ -267,7 +261,6 @@ export interface FileRoutesByFullPath {
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/support': typeof DashboardSupportRoute
   '/dashboard/transactions': typeof DashboardTransactionsRoute
-  '/dashboard/verify': typeof DashboardVerifyRoute
   '/dashboard/wallet': typeof DashboardWalletRoute
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
@@ -304,7 +297,6 @@ export interface FileRoutesByTo {
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/support': typeof DashboardSupportRoute
   '/dashboard/transactions': typeof DashboardTransactionsRoute
-  '/dashboard/verify': typeof DashboardVerifyRoute
   '/dashboard/wallet': typeof DashboardWalletRoute
   '/admin': typeof AdminIndexRoute
   '/dashboard': typeof DashboardIndexRoute
@@ -344,7 +336,6 @@ export interface FileRoutesById {
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/support': typeof DashboardSupportRoute
   '/dashboard/transactions': typeof DashboardTransactionsRoute
-  '/dashboard/verify': typeof DashboardVerifyRoute
   '/dashboard/wallet': typeof DashboardWalletRoute
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
@@ -385,7 +376,6 @@ export interface FileRouteTypes {
     | '/dashboard/settings'
     | '/dashboard/support'
     | '/dashboard/transactions'
-    | '/dashboard/verify'
     | '/dashboard/wallet'
     | '/admin/'
     | '/dashboard/'
@@ -422,7 +412,6 @@ export interface FileRouteTypes {
     | '/dashboard/settings'
     | '/dashboard/support'
     | '/dashboard/transactions'
-    | '/dashboard/verify'
     | '/dashboard/wallet'
     | '/admin'
     | '/dashboard'
@@ -461,7 +450,6 @@ export interface FileRouteTypes {
     | '/dashboard/settings'
     | '/dashboard/support'
     | '/dashboard/transactions'
-    | '/dashboard/verify'
     | '/dashboard/wallet'
     | '/admin/'
     | '/dashboard/'
@@ -730,13 +718,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardTransactionsRouteImport
       parentRoute: typeof DashboardRoute
     }
-    '/dashboard/verify': {
-      id: '/dashboard/verify'
-      path: '/verify'
-      fullPath: '/dashboard/verify'
-      preLoaderRoute: typeof DashboardVerifyRouteImport
-      parentRoute: typeof DashboardRoute
-    }
     '/dashboard/wallet': {
       id: '/dashboard/wallet'
       path: '/wallet'
@@ -790,7 +771,6 @@ interface DashboardRouteChildren {
   DashboardSettingsRoute: typeof DashboardSettingsRoute
   DashboardSupportRoute: typeof DashboardSupportRoute
   DashboardTransactionsRoute: typeof DashboardTransactionsRoute
-  DashboardVerifyRoute: typeof DashboardVerifyRoute
   DashboardWalletRoute: typeof DashboardWalletRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
 }
@@ -804,7 +784,6 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardSettingsRoute: DashboardSettingsRoute,
   DashboardSupportRoute: DashboardSupportRoute,
   DashboardTransactionsRoute: DashboardTransactionsRoute,
-  DashboardVerifyRoute: DashboardVerifyRoute,
   DashboardWalletRoute: DashboardWalletRoute,
   DashboardIndexRoute: DashboardIndexRoute,
 }
