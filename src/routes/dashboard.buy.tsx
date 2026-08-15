@@ -236,6 +236,10 @@ function BuyNumber() {
                   )}
                 </div>
 
+                <Button asChild variant="secondary" size="sm" className="w-full">
+                  <Link to="/dashboard/verify">Enter SMS code</Link>
+                </Button>
+
                 <Button
                   variant="outline"
                   size="sm"
