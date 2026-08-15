@@ -23,6 +23,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { useProfile, useIsAdmin, useSignOut, initials } from "@/lib/auth";
+import { useWallet } from "@/lib/queries";
+import { ngn } from "@/lib/currency";
 
 export type NavItem = { to: string; label: string; icon: LucideIcon };
 
@@ -42,6 +45,11 @@ export function AppShell({
   variant?: "customer" | "admin";
 }) {
   const [open, setOpen] = useState(false);
+  const { data: profile } = useProfile();
+  const { data: isAdmin } = useIsAdmin();
+  const { data: wallet } = useWallet();
+  const signOut = useSignOut();
+  const displayName = profile?.full_name?.trim() || profile?.email?.split("@")[0] || "Account";
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   const sidebar = (
@@ -79,13 +87,15 @@ export function AppShell({
         })}
       </nav>
       <div className="border-t border-sidebar-border p-4">
-        <Link
-          to={variant === "admin" ? "/dashboard" : "/admin"}
-          className="flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-medium text-sidebar-foreground/70 hover:text-sidebar-accent-foreground"
-        >
-          <LayoutDashboard className="h-3.5 w-3.5" />
-          {variant === "admin" ? "Customer dashboard" : "Admin dashboard"}
-        </Link>
+        {variant === "admin" || isAdmin ? (
+          <Link
+            to={variant === "admin" ? "/dashboard" : "/admin"}
+            className="flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-medium text-sidebar-foreground/70 hover:text-sidebar-accent-foreground"
+          >
+            <LayoutDashboard className="h-3.5 w-3.5" />
+            {variant === "admin" ? "Customer dashboard" : "Admin dashboard"}
+          </Link>
+        ) : null}
         <Link
           to="/"
           className="flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-medium text-sidebar-foreground/70 hover:text-sidebar-accent-foreground"
@@ -124,7 +134,7 @@ export function AppShell({
             <div className="ml-auto flex items-center gap-2 sm:gap-3">
               <div className="hidden items-center gap-2 rounded-xl border border-border bg-card px-3 py-2 sm:flex">
                 <Wallet className="h-4 w-4 text-accent" />
-                <span className="text-sm font-semibold">₦192,510</span>
+                <span className="text-sm font-semibold">{ngn(Number(wallet?.balance ?? 0))}</span>
               </div>
               <button className="relative grid h-10 w-10 place-items-center rounded-xl border border-border bg-card">
                 <Bell className="h-4 w-4" />
@@ -134,19 +144,21 @@ export function AppShell({
                 <DropdownMenuTrigger asChild>
                   <button className="flex items-center gap-2 rounded-xl border border-border bg-card p-1.5 pr-3">
                     <Avatar className="h-7 w-7">
-                      <AvatarFallback className="bg-ink text-[11px] text-ink-foreground">AO</AvatarFallback>
+                      <AvatarFallback className="bg-ink text-[11px] text-ink-foreground">
+                        {initials(profile?.full_name, profile?.email)}
+                      </AvatarFallback>
                     </Avatar>
-                    <span className="hidden text-sm font-medium sm:block">Ada O.</span>
+                    <span className="hidden max-w-[10rem] truncate text-sm font-medium sm:block">{displayName}</span>
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-52">
-                  <DropdownMenuLabel>ada.okafor@example.com</DropdownMenuLabel>
+                  <DropdownMenuLabel className="truncate">{profile?.email ?? "Signed in"}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild><Link to="/dashboard/profile">Profile</Link></DropdownMenuItem>
                   <DropdownMenuItem asChild><Link to="/dashboard/settings">Settings</Link></DropdownMenuItem>
                   <DropdownMenuItem asChild><Link to="/dashboard/wallet">Wallet</Link></DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild><Link to="/login">Log out</Link></DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => { void signOut(); }}>Log out</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
