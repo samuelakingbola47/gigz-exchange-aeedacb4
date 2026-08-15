@@ -5,7 +5,7 @@ import { StatusBadge } from "@/components/app/StatusBadge";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { services } from "@/lib/mock-data";
+import { useServices } from "@/lib/queries";
 import { ServiceIcon } from "@/components/brand/ServiceIcon";
 
 export const Route = createFileRoute("/admin/services")({
@@ -21,6 +21,8 @@ export const Route = createFileRoute("/admin/services")({
 });
 
 function AdminServices() {
+  const { data: services = [] } = useServices();
+
   return (
     <AdminShell title="Services" subtitle="Catalogue of supported verification services.">
       <div className="surface-card overflow-x-auto">
