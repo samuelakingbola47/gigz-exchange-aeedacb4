@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Check, Eye, EyeOff } from "lucide-react";
+import { Check, Eye, EyeOff, Loader2, MailCheck } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { AuthLayout } from "@/components/site/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,6 +27,9 @@ function RegisterPage() {
   const [form, setForm] = useState({ name: "", email: "", password: "", confirm: "" });
   const [terms, setTerms] = useState(false);
   const [touched, setTouched] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [serverError, setServerError] = useState("");
+  const [checkEmail, setCheckEmail] = useState(false);
 
   const errors = {
     name: form.name.trim().length < 2 ? "Enter your full name." : "",
@@ -44,7 +48,7 @@ function RegisterPage() {
   return (
     <AuthLayout
       title="Create your account"
-      subtitle="Start verifying in minutes. No card required for the prototype."
+      subtitle="Start verifying in minutes. Your wallet starts at ₦0 — no card required."
       footer={
         <>
           Already registered?{" "}
@@ -52,12 +56,41 @@ function RegisterPage() {
         </>
       }
     >
+      {checkEmail ? (
+        <div className="rounded-2xl border border-success/30 bg-success/10 p-6 text-center">
+          <MailCheck className="mx-auto h-8 w-8 text-success" />
+          <h2 className="mt-3 text-base font-semibold">Confirm your email</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            We sent a confirmation link to {form.email}. Click it to activate your account, then sign in.
+          </p>
+        </div>
+      ) : (
       <form
         className="space-y-5"
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault();
           setTouched(true);
-          if (valid) navigate({ to: "/dashboard" });
+          if (!valid) return;
+          setServerError("");
+          setBusy(true);
+          const { data, error } = await supabase.auth.signUp({
+            email: form.email.trim(),
+            password: form.password,
+            options: {
+              emailRedirectTo: `${window.location.origin}/dashboard`,
+              data: { full_name: form.name.trim() },
+            },
+          });
+          setBusy(false);
+          if (error) {
+            setServerError(error.message);
+            return;
+          }
+          if (data.session) {
+            navigate({ to: "/dashboard" });
+            return;
+          }
+          setCheckEmail(true);
         }}
       >
         <Field label="Full name" error={touched ? errors.name : ""}>
@@ -105,8 +138,16 @@ function RegisterPage() {
             {touched && errors.terms ? <span className="block text-xs text-destructive">{errors.terms}</span> : null}
           </span>
         </label>
-        <Button type="submit" className="w-full" size="lg">Create account</Button>
+        {serverError ? (
+          <p className="rounded-xl bg-destructive/10 px-4 py-3 text-sm text-destructive ring-1 ring-inset ring-destructive/25">
+            {serverError}
+          </p>
+        ) : null}
+        <Button type="submit" className="w-full" size="lg" disabled={busy}>
+          {busy ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Creating account…</> : "Create account"}
+        </Button>
       </form>
+      )}
     </AuthLayout>
   );
 }
