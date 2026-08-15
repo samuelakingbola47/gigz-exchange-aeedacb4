@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Eye, EyeOff, ShieldCheck, Loader2 } from "lucide-react";
-import { SiGoogle } from "react-icons/si";
+import { supabase } from "@/integrations/supabase/client";
 import { Logo } from "@/components/site/Logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,8 +26,8 @@ export const Route = createFileRoute("/login")({
 function LoginPage() {
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
-  const [email, setEmail] = useState("ada.okafor@example.com");
-  const [password, setPassword] = useState("demo1234");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
@@ -102,7 +102,7 @@ function LoginPage() {
 
           <form
             className="mt-7 space-y-5"
-            onSubmit={(e) => {
+            onSubmit={async (e) => {
               e.preventDefault();
               if (!email.includes("@") || password.length < 6) {
                 setError("Enter a valid email and a password of at least 6 characters.");
@@ -110,7 +110,21 @@ function LoginPage() {
               }
               setError("");
               setBusy(true);
-              setTimeout(() => navigate({ to: "/dashboard" }), 550);
+              const { error: signInError } = await supabase.auth.signInWithPassword({
+                email: email.trim(),
+                password,
+              });
+              if (signInError) {
+                setBusy(false);
+                setError(
+                  signInError.message.toLowerCase().includes("invalid")
+                    ? "Incorrect email or password."
+                    : signInError.message,
+                );
+                return;
+              }
+              await supabase.rpc("touch_last_login");
+              navigate({ to: "/dashboard" });
             }}
           >
             <div className="space-y-2">
@@ -168,19 +182,6 @@ function LoginPage() {
               {busy ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Signing in…</> : "Sign in"}
             </Button>
 
-            <div className="flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-ink-foreground/35">
-              <span className="h-px flex-1 bg-white/12" /> or <span className="h-px flex-1 bg-white/12" />
-            </div>
-
-            <Button
-              type="button"
-              variant="outline"
-              size="lg"
-              className="w-full border-white/15 bg-white/5 text-ink-foreground hover:bg-white/10 hover:text-ink-foreground"
-              onClick={() => setError("Social sign-in is a visual placeholder in this prototype.")}
-            >
-              <SiGoogle className="mr-2 h-4 w-4" /> Continue with Google
-            </Button>
           </form>
 
           <p className="mt-7 text-center text-sm text-ink-foreground/60">
@@ -190,7 +191,7 @@ function LoginPage() {
         </div>
 
         <p className="animate-rise mt-6 text-center text-xs text-ink-foreground/45" style={{ animationDelay: "160ms" }}>
-          Demo login — any valid-looking credentials open the dashboard.
+          Protected by encrypted sessions. Your dashboard stays private.
           <span className="mt-2 block">
             <Link to="/" className="hover:text-ink-foreground">← Back to gigzexchange.com</Link>
           </span>
