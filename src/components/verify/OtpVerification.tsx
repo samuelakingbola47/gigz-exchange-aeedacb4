@@ -222,9 +222,7 @@ export function OtpVerification({
                 inOrbit
                   ? status === "success"
                     ? "border-success/50 bg-success/10 text-success"
-                    : status === "error"
-                      ? "border-destructive/40 bg-destructive/8 text-destructive"
-                      : "border-accent/45 bg-accent/8 text-foreground"
+                    : "border-accent/45 bg-accent/8 text-foreground"
                   : d
                     ? "border-accent/45 bg-card"
                     : "border-border bg-secondary/50",
