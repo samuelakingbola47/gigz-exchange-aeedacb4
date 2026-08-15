@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Check, Eye, EyeOff, Loader2, MailCheck } from "lucide-react";
+import { Check, Eye, EyeOff, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { AuthLayout } from "@/components/site/AuthLayout";
 import { Button } from "@/components/ui/button";
@@ -29,7 +29,6 @@ function RegisterPage() {
   const [touched, setTouched] = useState(false);
   const [busy, setBusy] = useState(false);
   const [serverError, setServerError] = useState("");
-  const [checkEmail, setCheckEmail] = useState(false);
 
   const errors = {
     name: form.name.trim().length < 2 ? "Enter your full name." : "",
@@ -56,15 +55,6 @@ function RegisterPage() {
         </>
       }
     >
-      {checkEmail ? (
-        <div className="rounded-2xl border border-success/30 bg-success/10 p-6 text-center">
-          <MailCheck className="mx-auto h-8 w-8 text-success" />
-          <h2 className="mt-3 text-base font-semibold">Confirm your email</h2>
-          <p className="mt-1 text-sm text-muted-foreground">
-            We sent a confirmation link to {form.email}. Click it to activate your account, then sign in.
-          </p>
-        </div>
-      ) : (
       <form
         className="space-y-5"
         onSubmit={async (e) => {
@@ -147,7 +137,6 @@ function RegisterPage() {
           {busy ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Creating account…</> : "Create account"}
         </Button>
       </form>
-      )}
     </AuthLayout>
   );
 }

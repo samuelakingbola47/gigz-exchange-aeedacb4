@@ -63,7 +63,6 @@ function BuyNumber() {
   );
 
   const step = order ? 4 : service ? 3 : country ? 2 : 1;
-  const timeLeft = order ? countdown(order.expires_at) : "—";
   void tick;
 
   return (
