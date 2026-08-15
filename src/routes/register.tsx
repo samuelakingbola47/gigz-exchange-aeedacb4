@@ -90,7 +90,7 @@ function RegisterPage() {
             navigate({ to: "/dashboard" });
             return;
           }
-          setCheckEmail(true);
+          void navigate({ to: "/verify-email", search: { email: form.email.trim() } });
         }}
       >
         <Field htmlFor="reg-name" label="Full name" error={touched ? errors.name : ""}>
