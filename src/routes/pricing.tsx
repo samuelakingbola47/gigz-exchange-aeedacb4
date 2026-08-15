@@ -66,6 +66,8 @@ const tiers = [
 ];
 
 function PricingPage() {
+  const { data: countries = [] } = useCountries();
+
   return (
     <PublicLayout>
       <PageHero

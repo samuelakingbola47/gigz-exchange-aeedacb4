@@ -76,6 +76,9 @@ const faqs = [
 ];
 
 function Home() {
+  const { data: services = [] } = useServices();
+  const { data: countries = [] } = useCountries();
+
   return (
     <PublicLayout>
       {/* Hero */}
@@ -187,10 +190,10 @@ function Home() {
           {countries.slice(0, 8).map((c) => (
             <div key={c.id} className="surface-card px-4 py-4 transition-shadow hover:shadow-[var(--shadow-lift)]">
               <div className="flex items-center gap-3">
-                <CountryFlag country={c.id} name={c.name} size="lg" />
+                <CountryFlag country={c.country_code} name={c.name} size="lg" />
                 <div>
                   <p className="text-sm font-semibold">{c.name}</p>
-                  <p className="text-xs text-muted-foreground">{c.numbers.toLocaleString()} numbers</p>
+                  <p className="text-xs text-muted-foreground">{c.numbers_available.toLocaleString()} numbers</p>
                 </div>
               </div>
               <p className="mt-3 text-xs text-muted-foreground">
