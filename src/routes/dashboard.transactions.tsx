@@ -11,8 +11,9 @@ import {
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
-import { transactions } from "@/lib/mock-data";
 import { ngn } from "@/lib/currency";
+import { useTransactions } from "@/lib/queries";
+import { formatDateTime } from "@/lib/format";
 
 export const Route = createFileRoute("/dashboard/transactions")({
   head: () => ({
@@ -28,7 +29,21 @@ export const Route = createFileRoute("/dashboard/transactions")({
 
 function TransactionsPage() {
   const [type, setType] = useState("all");
-  const rows = useMemo(() => transactions.filter((t) => type === "all" || t.type === type), [type]);
+  const { data: transactions = [] } = useTransactions();
+  const rows = useMemo(() => transactions.filter((t) => type === "all" || t.type === type), [transactions, type]);
+
+  const totals = useMemo(() => {
+    let deposited = 0;
+    let spent = 0;
+    let refunded = 0;
+    for (const t of transactions) {
+      const amount = Number(t.amount);
+      if (t.type === "deposit") deposited += amount;
+      else if (t.type === "purchase") spent += Math.abs(amount);
+      else if (t.type === "refund") refunded += amount;
+    }
+    return { deposited, spent, refunded };
+  }, [transactions]);
 
   return (
     <CustomerShell
@@ -37,9 +52,9 @@ function TransactionsPage() {
       actions={<Button variant="outline"><Download className="mr-1.5 h-4 w-4" />Export</Button>}
     >
       <div className="grid gap-4 sm:grid-cols-3">
-        <StatCard label="Total deposited" value="₦1,305,800" hint="Lifetime (demo)" />
-        <StatCard label="Total spent" value="₦1,113,290" hint="Across 1,284 orders" />
-        <StatCard label="Refunded" value="₦27,630" hint="Expired & cancelled orders" />
+        <StatCard label="Total deposited" value={ngn(totals.deposited)} hint="Lifetime deposits" />
+        <StatCard label="Total spent" value={ngn(totals.spent)} hint="Across all orders" />
+        <StatCard label="Refunded" value={ngn(totals.refunded)} hint="Cancelled & expired orders" />
       </div>
 
       <div className="surface-card mt-6 flex items-center justify-between p-4">
@@ -48,9 +63,9 @@ function TransactionsPage() {
           <SelectTrigger className="w-44"><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All types</SelectItem>
-            <SelectItem value="Deposit">Deposit</SelectItem>
-            <SelectItem value="Purchase">Purchase</SelectItem>
-            <SelectItem value="Refund">Refund</SelectItem>
+            <SelectItem value="deposit">Deposit</SelectItem>
+            <SelectItem value="purchase">Purchase</SelectItem>
+            <SelectItem value="refund">Refund</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -71,12 +86,12 @@ function TransactionsPage() {
           <TableBody>
             {rows.map((t) => (
               <TableRow key={t.id}>
-                <TableCell className="font-medium">{t.id}</TableCell>
-                <TableCell className="text-muted-foreground">{t.date}</TableCell>
-                <TableCell>{t.type}</TableCell>
+                <TableCell className="font-medium">{t.reference}</TableCell>
+                <TableCell className="text-muted-foreground">{formatDateTime(t.created_at)}</TableCell>
+                <TableCell className="capitalize">{t.type}</TableCell>
                 <TableCell className="text-muted-foreground">{t.description}</TableCell>
-                <TableCell className={t.amount >= 0 ? "text-right font-semibold text-success" : "text-right font-semibold"}>
-                  {t.amount >= 0 ? "+" : "−"}{ngn(Math.abs(t.amount))}
+                <TableCell className={Number(t.amount) >= 0 ? "text-right font-semibold text-success" : "text-right font-semibold"}>
+                  {Number(t.amount) >= 0 ? "+" : "−"}{ngn(Math.abs(Number(t.amount)))}
                 </TableCell>
                 <TableCell className="text-right tabular-nums">{ngn(t.balance)}</TableCell>
                 <TableCell><StatusBadge status={t.status} /></TableCell>
@@ -94,8 +109,8 @@ function TransactionsPage() {
                 <p className="text-sm font-semibold">{t.type}</p>
                 <p className="text-xs text-muted-foreground">{t.description}</p>
               </div>
-              <span className={t.amount >= 0 ? "text-sm font-semibold text-success" : "text-sm font-semibold"}>
-                {t.amount >= 0 ? "+" : "−"}{ngn(Math.abs(t.amount))}
+              <span className={Number(t.amount) >= 0 ? "text-sm font-semibold text-success" : "text-sm font-semibold"}>
+                {Number(t.amount) >= 0 ? "+" : "−"}{ngn(Math.abs(Number(t.amount)))}
               </span>
             </div>
             <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
