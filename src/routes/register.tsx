@@ -67,7 +67,6 @@ function RegisterPage() {
             email: form.email.trim(),
             password: form.password,
             options: {
-              emailRedirectTo: `${window.location.origin}/dashboard`,
               data: { full_name: form.name.trim() },
             },
           });
