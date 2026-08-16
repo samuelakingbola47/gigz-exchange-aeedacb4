@@ -122,9 +122,10 @@ export function OtpVerification({
   };
 
   const positions = useMemo(() => {
-    const radius = 86;
+    const radius = 92;
+    const gap = length > 4 ? 52 : 74;
     return digits.map((_, i) => {
-      if (!inOrbit) return { x: (i - (length - 1) / 2) * 74, y: 0, lift: 0 };
+      if (!inOrbit) return { x: (i - (length - 1) / 2) * gap, y: 0, lift: 0 };
       const angle = (-90 + (360 / length) * i) * (Math.PI / 180);
       return { x: Math.cos(angle) * radius, y: Math.sin(angle) * radius, lift: -6 };
     });
@@ -233,7 +234,8 @@ export function OtpVerification({
             <div
               key={i}
               className={cn(
-                "absolute left-1/2 top-1/2 grid h-14 w-12 place-items-center rounded-2xl border font-display text-2xl font-bold transition-all duration-700 sm:h-16 sm:w-14",
+                "absolute left-1/2 top-1/2 grid place-items-center rounded-2xl border font-display font-bold transition-all duration-700",
+                length > 4 ? "h-13 w-11 text-xl sm:h-14 sm:w-12 sm:text-2xl" : "h-14 w-12 text-2xl sm:h-16 sm:w-14",
                 "[transition-timing-function:cubic-bezier(0.22,1,0.36,1)]",
                 inOrbit
                   ? status === "success"
@@ -267,7 +269,7 @@ export function OtpVerification({
           maxLength={length}
           disabled={status === "verifying" || status === "success"}
           className={cn(
-            "absolute left-1/2 top-1/2 h-16 w-[300px] -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-2xl bg-transparent text-center text-transparent caret-transparent outline-none",
+            "absolute left-1/2 top-1/2 h-16 w-full -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-2xl bg-transparent text-center text-transparent caret-transparent outline-none",
             inOrbit && "pointer-events-none",
           )}
         />
