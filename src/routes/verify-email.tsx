@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { AuthLayout } from "@/components/site/AuthLayout";
@@ -26,6 +27,9 @@ export const Route = createFileRoute("/verify-email")({
 function VerifyEmailPage() {
   const navigate = useNavigate();
   const { email } = Route.useSearch();
+  // Codes live for a limited window; used only to phrase the failure message.
+  const sentAt = useRef(Date.now());
+  const CODE_TTL_MS = 60 * 60 * 1000;
 
   const verify = async (code: string): Promise<VerifyResult> => {
     if (!email) {
@@ -38,11 +42,11 @@ function VerifyEmailPage() {
     // Real verification against the authentication provider's email OTP.
     const { data, error } = await supabase.auth.verifyOtp({ email, token: code, type: "email" });
     if (!error && data.session) return true;
-    if (error?.code === "otp_expired") {
-      return { ok: false, title: "Code expired", message: "Request a new verification code to continue." };
-    }
     if (error?.code === "over_email_send_rate_limit" || error?.status === 429) {
       return { ok: false, title: "Too many attempts", message: "Please wait a moment before trying again." };
+    }
+    if (Date.now() - sentAt.current > CODE_TTL_MS) {
+      return { ok: false, title: "Code expired", message: "Request a new verification code to continue." };
     }
     return {
       ok: false,
@@ -55,7 +59,10 @@ function VerifyEmailPage() {
     if (!email) return;
     const { error } = await supabase.auth.resend({ type: "signup", email });
     if (error) toast.error(error.message);
-    else toast.success("Verification code sent", { description: `We emailed a new code to ${email}.` });
+    else {
+      sentAt.current = Date.now();
+      toast.success("Verification code sent", { description: `We emailed a new code to ${email}.` });
+    }
   };
 
   return (
