@@ -6,12 +6,12 @@ import { cn } from "@/lib/utils";
 
 export type VerificationStatus = "idle" | "verifying" | "success" | "error";
 
+export type VerifyResult = boolean | { ok: boolean; title?: string; message?: string };
+
 export type OtpVerificationProps = {
-  /** Demo helper: expected code used when no onVerify handler is supplied. */
-  otpCode?: string;
   /** Number the code was sent to (display only). */
   phoneNumber?: string;
-  /** Number of digits. Defaults to 4. */
+  /** Number of digits. Defaults to 6. */
   length?: number;
   /** Controlled status override (e.g. driven by a real provider later). */
   verificationStatus?: VerificationStatus;
@@ -21,8 +21,8 @@ export type OtpVerificationProps = {
   resendSeconds?: number;
   title?: string;
   description?: ReactNode;
-  /** Real verification hook-up point. Resolve true/false. */
-  onVerify?: (code: string) => Promise<boolean> | boolean;
+  /** Real verification hook-up point. */
+  onVerify: (code: string) => Promise<VerifyResult> | VerifyResult;
   /** Real resend hook-up point. */
   onResend?: () => Promise<void> | void;
   onContinue?: () => void;
@@ -30,12 +30,11 @@ export type OtpVerificationProps = {
 };
 
 export function OtpVerification({
-  otpCode = "4719",
   phoneNumber = "+234 810 000 0000",
-  length = 4,
+  length = 6,
   verificationStatus,
   expiresAt,
-  resendSeconds = 24,
+  resendSeconds = 45,
   title = "Enter verification code",
   description,
   onVerify,
@@ -48,6 +47,10 @@ export function OtpVerification({
   const [internalStatus, setInternalStatus] = useState<VerificationStatus>("idle");
   const [shake, setShake] = useState(false);
   const [countdown, setCountdown] = useState(resendSeconds);
+  const [errorInfo, setErrorInfo] = useState<{ title: string; message: string }>({
+    title: "Verification failed",
+    message: "Invalid verification code. Please check your email and try again.",
+  });
   const inputRef = useRef<HTMLInputElement>(null);
 
   const status = verificationStatus ?? internalStatus;
@@ -65,11 +68,23 @@ export function OtpVerification({
     async (code: string) => {
       setInternalStatus("verifying");
       const start = Date.now();
-      let ok: boolean;
+      let result: VerifyResult;
       try {
-        ok = onVerify ? await onVerify(code) : code === otpCode;
+        result = await onVerify(code);
       } catch {
-        ok = false;
+        result = false;
+      }
+      const ok = typeof result === "boolean" ? result : result.ok;
+      if (!ok && typeof result === "object") {
+        setErrorInfo({
+          title: result.title ?? "Verification failed",
+          message: result.message ?? "Invalid verification code. Please check your email and try again.",
+        });
+      } else if (!ok) {
+        setErrorInfo({
+          title: "Verification failed",
+          message: "Invalid verification code. Please check your email and try again.",
+        });
       }
       const wait = Math.max(0, 1900 - (Date.now() - start));
       setTimeout(() => {
@@ -82,7 +97,7 @@ export function OtpVerification({
         }
       }, wait);
     },
-    [onVerify, otpCode],
+    [onVerify],
   );
 
   const handleChange = (raw: string) => {
@@ -129,13 +144,13 @@ export function OtpVerification({
 
       <div className="relative text-center">
         <h3 className="font-display text-xl font-bold sm:text-2xl">
-          {status === "success" ? "Verified successfully" : status === "error" ? "Verification failed" : title}
+          {status === "success" ? "Verified successfully" : status === "error" ? errorInfo.title : title}
         </h3>
         <p className="mx-auto mt-2 max-w-sm text-sm text-muted-foreground">
           {status === "success"
             ? "Your verification has been completed."
             : status === "error"
-              ? "The code you entered is incorrect. Please try again."
+              ? errorInfo.message
               : (description ?? (
                   <>
                     We sent a {length}-digit code to <span className="font-medium text-foreground">{phoneNumber}</span>
@@ -148,7 +163,7 @@ export function OtpVerification({
       {/* Stage */}
       <div
         className={cn(
-          "relative mx-auto mt-8 h-[240px] w-full max-w-[340px] select-none sm:h-[260px]",
+          "relative mx-auto mt-8 h-[240px] w-full max-w-[380px] select-none sm:h-[280px]",
           shake && "animate-otp-shake",
         )}
       >
