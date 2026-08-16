@@ -38,9 +38,11 @@ function VerifyEmailPage() {
     // Real verification against the authentication provider's email OTP.
     const { data, error } = await supabase.auth.verifyOtp({ email, token: code, type: "email" });
     if (!error && data.session) return true;
-    const raw = (error?.message ?? "").toLowerCase();
-    if (raw.includes("expired")) {
+    if (error?.code === "otp_expired") {
       return { ok: false, title: "Code expired", message: "Request a new verification code to continue." };
+    }
+    if (error?.code === "over_email_send_rate_limit" || error?.status === 429) {
+      return { ok: false, title: "Too many attempts", message: "Please wait a moment before trying again." };
     }
     return {
       ok: false,
