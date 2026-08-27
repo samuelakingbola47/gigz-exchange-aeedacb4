@@ -89,7 +89,7 @@ function Home() {
           <div>
             <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-medium text-ink-foreground/85">
               <Sparkles className="h-3.5 w-3.5 text-accent" />
-              Live inventory across 50+ countries
+              Fast, secure verification across 50+ countries
             </span>
             <h1 className="mt-6 text-4xl font-bold leading-[1.05] text-ink-foreground sm:text-5xl lg:text-6xl">
               Fast & Reliable <span className="text-gradient-accent">SMS Verification</span>
