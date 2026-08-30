@@ -84,7 +84,7 @@ begin
     currency, reference, description, status
   )
   values (
-    _user_id, 'credit', _amount, _bal, _bal + _amount,
+    _user_id, 'deposit', _amount, _bal, _bal + _amount,
     'NGN', _provider_reference,
     coalesce(_description, 'Wallet funding'), 'completed'
   )
