@@ -134,7 +134,7 @@ begin
   _buy_json := _buy_res.content::jsonb;
 
   if _buy_res.status != 200 or _buy_json->>'id' is null or _buy_json->>'phone' is null then
-    raise exception 'Provider error: %', coalesce(_buy_json->>'message', _buy_res.content);
+    raise exception 'Provider error (status %): %', _buy_res.status, coalesce(_buy_res.content, '(empty response)');
   end if;
 
   _provider_ref := _buy_json->>'id';
