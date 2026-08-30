@@ -145,6 +145,52 @@ export function useBuyNumber() {
   });
 }
 
+/**
+ * Live price + stock check against the real SMS provider (5sim), computed
+ * server-side from a current quote plus your markup. Re-checks periodically
+ * since provider prices can move while the user is browsing.
+ */
+export function useLivePrice(countryCode?: string | null, serviceCode?: string | null) {
+  return useQuery({
+    queryKey: ["live-price", countryCode, serviceCode],
+    enabled: Boolean(countryCode && serviceCode),
+    refetchInterval: 15000,
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("get_live_price", {
+        _country_code: countryCode!,
+        _service_code: serviceCode!,
+      });
+      if (error) throw error;
+      const row = Array.isArray(data) ? data[0] : data;
+      return row as { ngn_price: number | null; in_stock: boolean };
+    },
+  });
+}
+
+/**
+ * Real number purchase: gets a live quote, checks wallet balance, buys the
+ * number from the SMS provider, then charges the wallet and creates the
+ * order — all atomically, server-side (see buy_real_number in Postgres).
+ */
+export function useBuyRealNumber() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (input: { countryCode: string; serviceCode: string }) => {
+      const { data, error } = await supabase.rpc("buy_real_number", {
+        _country_code: input.countryCode,
+        _service_code: input.serviceCode,
+      });
+      if (error) throw error;
+      return data as unknown as Order;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["orders"] });
+      qc.invalidateQueries({ queryKey: ["wallet"] });
+      qc.invalidateQueries({ queryKey: ["transactions"] });
+    },
+  });
+}
+
 export function useCancelOrder() {
   const qc = useQueryClient();
   return useMutation({
