@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 import { ngn } from "@/lib/currency";
 import { ServiceIcon } from "@/components/brand/ServiceIcon";
 import { CountryFlag } from "@/components/brand/CountryFlag";
-import { useBuyNumber, useCancelOrder, useCountries, useOrders, useServices, useWallet } from "@/lib/queries";
+import { useBuyRealNumber, useCancelOrder, useCountries, useLivePrice, useOrders, useServices, useWallet } from "@/lib/queries";
 import { countdown } from "@/lib/format";
 import { SmsSessionPanel } from "@/components/sms/SmsSessionPanel";
 
@@ -32,7 +32,7 @@ function BuyNumber() {
   const { data: services = [], isLoading: servicesLoading } = useServices();
   const { data: wallet } = useWallet();
   const { data: activeOrders = [] } = useOrders(["waiting", "sms_received"]);
-  const buy = useBuyNumber();
+  const buy = useBuyRealNumber();
   const cancel = useCancelOrder();
 
   const [countryCode, setCountryCode] = useState<string | null>(null);
@@ -48,9 +48,13 @@ function BuyNumber() {
 
   const country = countries.find((c) => c.country_code === countryCode) ?? null;
   const service = services.find((s) => s.code === serviceCode) ?? null;
-  const price = country && service ? Number(country.base_price) + Number(service.base_price) : 0;
+
+  const { data: liveQuote, isFetching: quoteLoading } = useLivePrice(countryCode, serviceCode);
+  const price = liveQuote?.ngn_price ?? 0;
+  const outOfStock = Boolean(country && service && liveQuote && !liveQuote.in_stock);
+
   const balance = Number(wallet?.balance ?? 0);
-  const insufficient = Boolean(country && service && balance < price);
+  const insufficient = Boolean(country && service && liveQuote?.in_stock && balance < price);
   const order = activeOrders[0] ?? null;
 
   const filteredCountries = useMemo(
@@ -68,7 +72,7 @@ function BuyNumber() {
   return (
     <CustomerShell
       title="Buy a number"
-      subtitle="Demo inventory — no SMS provider is connected yet, but orders and wallet debits are real."
+      subtitle="Live pricing from our SMS provider — numbers and wallet debits are real."
     >
       <div className="mb-6 grid gap-2 sm:grid-cols-4">
         {["Select country", "Select service", "Request number", "Active order"].map((label, i) => (
@@ -156,13 +160,25 @@ function BuyNumber() {
               <Row label="Duration" value="20 minutes" />
               <Row label="Wallet balance" value={ngn(balance)} />
               <div className="border-t border-border pt-3">
-                <Row label="Total" value={country && service ? ngn(price) : "—"} strong />
+                <Row
+                  label="Total (live price)"
+                  value={
+                    !country || !service
+                      ? "—"
+                      : quoteLoading
+                      ? <Loader2 className="h-4 w-4 animate-spin" />
+                      : outOfStock
+                      ? <span className="text-destructive">Out of stock</span>
+                      : ngn(price)
+                  }
+                  strong
+                />
               </div>
             </dl>
             <Button
               className="mt-5 w-full"
               size="lg"
-              disabled={!country || !service || insufficient || buy.isPending || Boolean(order)}
+              disabled={!country || !service || quoteLoading || outOfStock || insufficient || buy.isPending || Boolean(order)}
               onClick={() => {
                 if (!country || !service) return;
                 buy.mutate(
@@ -176,7 +192,11 @@ function BuyNumber() {
             >
               {buy.isPending ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Reserving number…</> : "Request number"}
             </Button>
-            {insufficient ? (
+            {outOfStock ? (
+              <p className="mt-3 text-center text-xs font-medium text-destructive">
+                No numbers currently in stock for this country/service — try another combination.
+              </p>
+            ) : insufficient ? (
               <p className="mt-3 text-center text-xs font-medium text-destructive">
                 Not enough balance. <Link to="/dashboard/wallet" className="underline">Add funds</Link>
               </p>
@@ -200,7 +220,7 @@ function BuyNumber() {
               serviceCode={order.service_code}
               orderReference={order.order_reference}
               expiresAt={order.expires_at}
-              demo
+              demo={order.is_demo}
               state={order.status === "sms_received" ? "received" : "waiting"}
               messages={
                 order.verification_code
