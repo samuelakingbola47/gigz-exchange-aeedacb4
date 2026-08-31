@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Check, Eye, EyeOff, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -21,6 +21,41 @@ export const Route = createFileRoute("/register")({
   component: RegisterPage,
 });
 
+/**
+ * Checks a password against the public "Have I Been Pwned" breach database
+ * using the k-anonymity model: only the first 5 characters of the SHA-1
+ * hash are ever sent over the network, never the password itself or the
+ * full hash. This mirrors the same check Supabase Auth performs server-side
+ * on signUp, so the user sees a consistent warning BEFORE submitting
+ * instead of a contradictory rejection after.
+ *
+ * Returns: number of times seen in breaches (0 = clean), or null if the
+ * check couldn't be completed (e.g. offline) — in which case we fail open
+ * and let Supabase's own server-side check be the final word.
+ */
+async function checkPwnedPassword(password: string): Promise<number | null> {
+  try {
+    const bytes = new TextEncoder().encode(password);
+    const hashBuffer = await crypto.subtle.digest("SHA-1", bytes);
+    const hashHex = Array.from(new Uint8Array(hashBuffer))
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("")
+      .toUpperCase();
+    const prefix = hashHex.slice(0, 5);
+    const suffix = hashHex.slice(5);
+
+    const res = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`);
+    if (!res.ok) return null;
+    const text = await res.text();
+    const match = text.split("\n").find((line) => line.startsWith(suffix));
+    if (!match) return 0;
+    const count = parseInt(match.split(":")[1] ?? "0", 10);
+    return Number.isFinite(count) ? count : 0;
+  } catch {
+    return null; // fail open — never block signup on a network hiccup
+  }
+}
+
 function RegisterPage() {
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
@@ -30,16 +65,48 @@ function RegisterPage() {
   const [busy, setBusy] = useState(false);
   const [serverError, setServerError] = useState("");
 
+  // null = not checked yet, 0 = confirmed clean, >0 = seen in N breaches
+  const [pwnedCount, setPwnedCount] = useState<number | null>(null);
+  const [checkingPwned, setCheckingPwned] = useState(false);
+
+  useEffect(() => {
+    if (form.password.length < 8) {
+      setPwnedCount(null);
+      setCheckingPwned(false);
+      return;
+    }
+    setCheckingPwned(true);
+    const handle = setTimeout(async () => {
+      const count = await checkPwnedPassword(form.password);
+      setPwnedCount(count);
+      setCheckingPwned(false);
+    }, 500); // debounce so we don't hit the API on every keystroke
+    return () => clearTimeout(handle);
+  }, [form.password]);
+
+  const isBreached = pwnedCount !== null && pwnedCount > 0;
+
   const errors = {
     name: form.name.trim().length < 2 ? "Enter your full name." : "",
     email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email) ? "" : "Enter a valid email address.",
-    password: form.password.length < 8 ? "Use at least 8 characters." : "",
+    password:
+      form.password.length < 8
+        ? "Use at least 8 characters."
+        : isBreached
+        ? "This password has appeared in known data breaches. Please choose a different one."
+        : "",
     confirm: form.confirm !== form.password || !form.confirm ? "Passwords must match." : "",
     terms: terms ? "" : "You must accept the terms.",
   };
   const valid = Object.values(errors).every((e) => !e);
 
-  const strength = Math.min(4, [/.{8,}/, /[A-Z]/, /[0-9]/, /[^A-Za-z0-9]/].filter((r) => r.test(form.password)).length);
+  const compositionStrength = Math.min(
+    4,
+    [/.{8,}/, /[A-Z]/, /[0-9]/, /[^A-Za-z0-9]/].filter((r) => r.test(form.password)).length,
+  );
+  // If the password is a known breach, show it as weak regardless of how
+  // "complex" it looks — a leaked password is unsafe no matter its shape.
+  const displayStrength = isBreached ? 4 : compositionStrength;
 
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
@@ -106,11 +173,28 @@ function RegisterPage() {
                 key={i}
                 className={cn(
                   "h-1 flex-1 rounded-full transition-colors",
-                  i < strength ? (strength <= 2 ? "bg-warning" : "bg-success") : "bg-border",
+                  i < displayStrength
+                    ? isBreached
+                      ? "bg-destructive"
+                      : displayStrength <= 2
+                      ? "bg-warning"
+                      : "bg-success"
+                    : "bg-border",
                 )}
               />
             ))}
           </div>
+          {form.password.length >= 8 ? (
+            checkingPwned ? (
+              <p className="mt-1.5 text-xs text-muted-foreground">Checking password safety…</p>
+            ) : isBreached ? (
+              <p className="mt-1.5 text-xs font-medium text-destructive">
+                This password has appeared in {pwnedCount!.toLocaleString()} known data breaches. Please choose a different one.
+              </p>
+            ) : pwnedCount === 0 ? (
+              <p className="mt-1.5 text-xs text-success">No known breaches found for this password.</p>
+            ) : null
+          ) : null}
         </Field>
         <Field htmlFor="reg-confirm" label="Confirm password" error={touched ? errors.confirm : ""}>
           <div className="relative">
@@ -132,7 +216,7 @@ function RegisterPage() {
             {serverError}
           </p>
         ) : null}
-        <Button type="submit" className="w-full" size="lg" disabled={busy}>
+        <Button type="submit" className="w-full" size="lg" disabled={busy || checkingPwned}>
           {busy ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Creating account…</> : "Create account"}
         </Button>
       </form>
