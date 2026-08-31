@@ -130,7 +130,7 @@ function RegisterPage() {
           if (!valid) return;
           setServerError("");
           setBusy(true);
-          const { data, error } = await supabase.auth.signUp({
+          const { error } = await supabase.auth.signUp({
             email: form.email.trim(),
             password: form.password,
             options: {
@@ -140,10 +140,6 @@ function RegisterPage() {
           setBusy(false);
           if (error) {
             setServerError(error.message);
-            return;
-          }
-          if (data.session) {
-            navigate({ to: "/dashboard" });
             return;
           }
           void navigate({ to: "/verify-email", search: { email: form.email.trim() } });
