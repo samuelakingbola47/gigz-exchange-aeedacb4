@@ -191,6 +191,54 @@ export function useBuyRealNumber() {
   });
 }
 
+/**
+ * Wallet funding via Paystack. The server (Postgres) talks to Paystack and is the
+ * only thing that ever credits a wallet - the browser just starts a payment and
+ * later asks "did it go through?". See start_paystack_payment / verify_paystack_payment.
+ */
+export function useStartPayment() {
+  return useMutation({
+    mutationFn: async (amount: number) => {
+      const { data, error } = await supabase.rpc("start_paystack_payment", { _amount_ngn: amount });
+      if (error) throw error;
+      return data as unknown as { authorization_url: string; reference: string };
+    },
+  });
+}
+
+export function useVerifyPayment() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (reference: string) => {
+      const { data, error } = await supabase.rpc("verify_paystack_payment", { _reference: reference });
+      if (error) throw error;
+      return data as unknown as "completed" | "pending" | "failed" | "expired";
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["wallet"] });
+      qc.invalidateQueries({ queryKey: ["transactions"] });
+    },
+  });
+}
+
+/** Settles any of the customer's unfinished payments (e.g. they closed the tab before returning). */
+export function useSettlePendingPayments() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async () => {
+      const { data, error } = await supabase.rpc("verify_my_pending_payments");
+      if (error) throw error;
+      return Number(data ?? 0);
+    },
+    onSuccess: (count) => {
+      if (count > 0) {
+        qc.invalidateQueries({ queryKey: ["wallet"] });
+        qc.invalidateQueries({ queryKey: ["transactions"] });
+      }
+    },
+  });
+}
+
 export function useCancelOrder() {
   const qc = useQueryClient();
   return useMutation({
@@ -318,4 +366,3 @@ export function useAdminTickets() {
     },
   });
 }
-
